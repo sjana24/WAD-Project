@@ -9,8 +9,8 @@ $logs = $log->getAllLogs();
 <h2>Access Logs</h2>
 
     
-    <a href="lock.php">🔒 Lock Screen</a> | 
-    <a href="admin_login.php">🔑 Admin Login</a>
+    <!-- <a href="lock.php">🔒 Lock Screen</a> |  -->
+    <!-- <a href="admin_login.php">🔑 Admin Login</a> -->
     <a href="actions/admin_logout.php">🔑 Log out</a>
     <a href="actions/add_user.php">🔑 Add user</a>
 
@@ -24,6 +24,7 @@ $logs = $log->getAllLogs();
             <td><?= htmlspecialchars($row['code_used']) ?></td>
             <td><?= htmlspecialchars($row['status']) ?></td>
             <td><?= htmlspecialchars($row['timestamp']) ?></td>
+            
         </tr>
     <?php endforeach; ?>
 </table>
