@@ -1,8 +1,7 @@
 <?php
-
-class Auth{
 session_start();
 if (!isset($_SESSION['admin_logged_in'])) {
-    header("Location: admin_login.php");
+    header("Location: ../admin_login.php");
     exit();
 }
+?>
