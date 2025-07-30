@@ -10,15 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $auth->adminLogin($username, $password);
 }
 
-class Auth {
-    private $conn;
+class Auth
+{
+    public $conn;
 
-    public function __construct() {
+    public function __construct()
+    {
         $db = new dbConnect();
         $this->conn = $db->connect();
     }
 
-    public function adminLogin($username, $password) {
+    public function adminLogin($username, $password)
+    {
         if (empty($username) || empty($password)) {
             echo "Username and password are required.";
             return;
@@ -26,6 +29,7 @@ class Auth {
 
         try {
             $sql = "SELECT * FROM admins WHERE username = :username";
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->execute();
@@ -37,9 +41,9 @@ class Auth {
                 header("Location: ../logs.php");
                 exit();
             } else {
-                $x=$admin['username'];
-                $y=$admin['password_hash'];
-                $z=$password;
+                $x = $admin['username'];
+                $y = $admin['password_hash'];
+                $z = $password;
                 echo "$x,$y,$z";
                 // echo `$admin['password_hash'] `;
                 echo "Invalid username or password.";
@@ -50,7 +54,8 @@ class Auth {
     }
 
     // Middleware-style check for login
-    public static function check() {
+    public static function check()
+    {
         session_start();
         if (!isset($_SESSION['admin_logged_in'])) {
             header("Location: ../admin_login.php");

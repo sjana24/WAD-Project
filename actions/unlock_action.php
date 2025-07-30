@@ -1,21 +1,33 @@
+
 <?php
 require_once "../db/config.php";
+require_once "../includes/accessHandler.php";
 
-$code = $_POST['code'];
 
-// Check code
-$sql = "SELECT * FROM user_codes WHERE code = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $code);
-$stmt->execute();
-$result = $stmt->get_result();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['code'])) {
+    $code = $_POST['code'];
 
-$status = $result->num_rows > 0 ? 'Success' : 'Fail';
+    $db = new dbConnect();
+    $conn = $db->connect();
 
-// Log the attempt
-$log = $conn->prepare("INSERT INTO access_logs (code_used, status) VALUES (?, ?)");
-$log->bind_param("ss", $code, $status);
-$log->execute();
+    $handler = new AccessHandler($conn);
+    $status = $handler->checkCode($code);
+    $handler->logAttempt($code, $status);
 
-echo ($status === 'Success') ? "Access Granted ✅" : "Access Denied ❌";
-?>
+    if ($status === 'Success') {
+        echo "<script>
+            alert('Access Granted ✅');
+            window.location.href = '../lock.php';
+        </script>";
+    } else {
+        echo "<script>
+            alert('Access Denied ❌');
+            window.location.href = '../lock.php';
+        </script>";
+    }
+} else {
+    echo "<script>
+        alert('No code submitted.');
+        window.location.href = '../lock.php';
+    </script>";
+}
