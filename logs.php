@@ -12,7 +12,7 @@ $logs = $log->getAllLogs();
     <!-- <a href="lock.php">🔒 Lock Screen</a> |  -->
     <!-- <a href="admin_login.php">🔑 Admin Login</a> -->
     <a href="actions/admin_logout.php">🔑 Log out</a>
-    <a href="users.php">🔑 Add user</a>
+    <a href="users.php">🔑 Manage user</a>
 
 
 <table border="1">
