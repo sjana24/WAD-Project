@@ -9,7 +9,7 @@ class dbConnect {
     private $pass = "";
 
     public function connect() {
-        require_once 'config.php'; // Include the database configuration file
+       
         try {
             $this->conn = new PDO("mysql:host=$this->host;dbname=$this->db", $this->user, $this->pass);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
