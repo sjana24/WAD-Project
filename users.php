@@ -1,6 +1,8 @@
 <?php
 include "includes/auth.php";
 include "db/config.php";
+include "./actions/add_user.php";
+include "./actions/delete_user.php";
 
 // Class to manage user codes
 class UserCodeManager {
@@ -16,11 +18,7 @@ class UserCodeManager {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function addCode($username,$code) {
-        $sql = "INSERT INTO user_data (username,code, created_at, updated_at) VALUES (:username,:code, NOW(), NOW())";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([':username'=>$username,':code' => $code]);
-    }
+   
 
     public function deleteCode($id) {
         $sql = "DELETE FROM user_data WHERE id = :id";
@@ -48,6 +46,8 @@ class UserCodeManager {
 $myObject = new dbConnect();
 $conn = $myObject->connect();
 $codeManager = new UserCodeManager($conn);
+$addUser = new add_user($conn);
+$deleteUser = new delete_user($conn);
 
 // Handle Add Code
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nic'])) {
@@ -55,19 +55,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nic'])) {
     $number=$_POST['mobile_number'];
     $nic=$_POST['nic'];
     $code = $codeManager->generateAccessCode($number, $nic);
-    // echo "Generated Code: $code"; // Debugging line
-    // echo $name,$number,$nic,$code;
-
-    $codeManager->addCode($name,$code);
+    
+    $addUser->addUser($name, $code);
+    
     header("Location: users.php");
     exit;
 }
 
 // Handle Delete Code
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-    $codeManager->deleteCode($_POST['id']);
-    header("Location: users.php");
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status'])) {
+    echo "Delete Code: " . $_POST['id']; 
+    print_r($_POST); // Debugging line
+    // Debugging line
+    // echo "Delete User: " . $_POST['name']; // Debugging line
+    // $codeManager->deleteCode($_POST['id']);
+    $deleteUser->deleteUser($_POST['id']);
+    // header("Location: users.php");
+    // exit;
 }
 
 // Fetch all codes
@@ -95,15 +99,8 @@ $codes = $codeManager->getAllCodes();
             <td><?= htmlspecialchars($row['id']) ?></td>
             <td><?= htmlspecialchars($row['code']) ?></td>
             <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
-            <!-- <td><?= htmlspecialchars($row['status'] ?? '-') ?></td> -->
-            <!-- <td> -->
-                <form method="POST" style="display:inline">
-                    <td><input type="hidden" name="id" value="<?= $row['id'] ?>" />
-                    <button type="submit"><?= htmlspecialchars($row['status'] ?? '-') ?></button></td>
-                    <td><input type="hidden" name="id" value="<?= $row['id'] ?>" />
-                    <button type="submit">Change pwd</button></td>
-                </form>
-            <!-- </td> -->
+            <td><?= htmlspecialchars($row['status'] ?? '-') ?></td> 
+            
         </tr>
     <?php endforeach; ?>
 </table>
