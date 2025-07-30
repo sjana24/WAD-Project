@@ -75,7 +75,8 @@ $codes = $codeManager->getAllCodes();
 ?>
 
 <!-- HTML Output -->
-<h2>User Codes</h2>
+<h2>User Datas</h2>
+<a href="logs.php">View Access Logs</a>
 <a href="actions/admin_logout.php">🔑 Log out</a>
 <form method="POST">
     <label id="name" >Name:</label>
@@ -88,19 +89,21 @@ $codes = $codeManager->getAllCodes();
 </form>
 
 <table border="1">
-    <tr><th>ID</th><th>Code</th><th>Username</th><th>Action</th></tr>
+    <tr><th>ID</th><th>Code</th><th>Username</th><th colspan="2">Action</th></tr>
     <?php foreach ($codes as $row): ?>
         <tr>
             <td><?= htmlspecialchars($row['id']) ?></td>
             <td><?= htmlspecialchars($row['code']) ?></td>
             <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
             <!-- <td><?= htmlspecialchars($row['status'] ?? '-') ?></td> -->
-            <td>
+            <!-- <td> -->
                 <form method="POST" style="display:inline">
-                    <input type="hidden" name="id" value="<?= $row['id'] ?>" />
-                    <button type="submit"><?= htmlspecialchars($row['status'] ?? '-') ?></button>
+                    <td><input type="hidden" name="id" value="<?= $row['id'] ?>" />
+                    <button type="submit"><?= htmlspecialchars($row['status'] ?? '-') ?></button></td>
+                    <td><input type="hidden" name="id" value="<?= $row['id'] ?>" />
+                    <button type="submit">Change pwd</button></td>
                 </form>
-            </td>
+            <!-- </td> -->
         </tr>
     <?php endforeach; ?>
 </table>
