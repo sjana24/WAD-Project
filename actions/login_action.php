@@ -41,12 +41,10 @@ class Auth
                 header("Location: ../logs.php");
                 exit();
             } else {
-                $x = $admin['username'];
-                $y = $admin['password_hash'];
-                $z = $password;
-                echo "$x,$y,$z";
-                // echo `$admin['password_hash'] `;
+                
                 echo "Invalid username or password.";
+                header("Location: ../admin_login.php");
+                exit();
             }
         } catch (PDOException $e) {
             echo "Login failed: " . $e->getMessage();

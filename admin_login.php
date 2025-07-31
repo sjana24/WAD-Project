@@ -4,3 +4,4 @@
     <input type="password" name="password" placeholder="Password" required />
     <button type="submit">Login</button>
 </form>
+<a href="index.php">🔒 Lock Screen</a> | 
