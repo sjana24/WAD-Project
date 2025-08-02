@@ -1,7 +1,7 @@
 <?php
 // login_action.php
 session_start();
-require_once '../db/config.php';
+require_once 'db/config.php';
 
 $message = '';
 $messageType = '';
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Redirect to dashboard after successful access
                     $_SESSION['login_message'] = $message;
                     $_SESSION['login_message_type'] = $messageType;
-                    header("Location: ../index.php");
+                    header("Location: index.php");
                     exit;
                 } else {
                     // ❌ Code does not match or is not active
@@ -69,46 +69,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Store message in session and redirect back to lock.php
     $_SESSION['login_message'] = $message;
     $_SESSION['login_message_type'] = $messageType;
-    header("Location: ../lock.php");
+    header("Location: lock.php");
     exit;
 } else {
     // If accessed directly without POST, redirect to lock.php
-    header("Location: ../lock.php");
+    header("Location: lock.php");
     exit;
 }
 ?>
-            $sql = "SELECT * FROM admins WHERE username = :username";
-
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-            $stmt->execute();
-            $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($admin && password_verify($password, $admin['password_hash'])) {
-                $_SESSION['admin_logged_in'] = true;
-                $_SESSION['admin_username'] = $username;
-                header("Location: ../logs.php");
-                exit();
-            } else {
-                $x = $admin['username'];
-                $y = $admin['password_hash'];
-                $z = $password;
-                echo "$x,$y,$z";
-                // echo `$admin['password_hash'] `;
-                echo "Invalid username or password.";
-            }
-        } catch (PDOException $e) {
-            echo "Login failed: " . $e->getMessage();
-        }
-    }
-
-    // Middleware-style check for login
-    public static function check()
-    {
-        session_start();
-        if (!isset($_SESSION['admin_logged_in'])) {
-            header("Location: ../admin_login.php");
-            exit();
-        }
-    }
-}
