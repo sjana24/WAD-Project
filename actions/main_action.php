@@ -21,9 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //admin login handle
     if (!empty($submittedUsername) && trim($submittedUsername) !== '' && !empty($submittedPassword) && trim($submittedPassword) !== '') {
-        echo "$submittedUsername, $submittedPassword";
+        // echo "$submittedUsername, $submittedPassword";
         $myObj = new LoginAction();
-        $myObj->admin_login($submittedUsername, $submittedPassword);
+        $response=$myObj->admin_login($submittedUsername, $submittedPassword);
+         $data = json_decode($response, true);
+
+        if ($data['success']) {
+            // echo $data['success'];
+            echo $data['message'];
+            // echo $data['code'];
+        } else {
+            echo $data['success'];
+            echo  $data['message'];
+            echo  $data['error'];
+        }
     }
 
     // Handle Add new Code
@@ -31,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // echo "$submittedName, $submittedMobileNumber,$submittedNIC";
         $myObj = new Add_User();
         $response = $myObj->add_user($submittedName, $submittedMobileNumber, $submittedNIC);
-        
+
         $data = json_decode($response, true);
 
         if ($data['success']) {
@@ -42,10 +53,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo $data['success'];
             echo  $data['message'];
         }
-        
     }
-
-
-
- 
 }

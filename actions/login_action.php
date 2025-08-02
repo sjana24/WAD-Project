@@ -1,13 +1,11 @@
 <?php
-// login_action.php
+
 session_start();
 require_once '../db/config.php';
 
-class LoginAction
-{
+class LoginAction{
 
-    private $message = '';
-    private $messageType = '';
+
     private $conn;
     private $submittedCode = '';
     private $submittedUsername = '';
@@ -18,8 +16,13 @@ class LoginAction
         // Initialize message and type
         $this->conn = (new dbConnect())->connect();
         if (!$this->conn) {
-            $message = "Database connection failed. Please try again later.";
-            $messageType = 'error';
+            // $message = "";
+            // $messageType = 'error';
+            return json_encode([
+                    "success" => false,
+                    "error" => "db not connect<br>.",
+                    "message" => "Database connection failed. Please try again later.<br>"
+                ]);
         }
     }
 
@@ -37,7 +40,7 @@ class LoginAction
             $result = $stmt->fetch();
 
             if ($result) {
-                // ✅ Code matches and is active
+                // Code matches and is active
                 $_SESSION['access_granted'] = true;
                 $_SESSION['authenticated_user'] = $result['username'];
                 $_SESSION['auth_time'] = time();
@@ -55,7 +58,7 @@ class LoginAction
                 header("Location: ../index.php");
                 exit;
             } else {
-                // ❌ Code does not match or is not active
+                //  Code does not match or is not active
                 $message = "Access Denied: Invalid or inactive access code.";
                 $messageType = 'error';
 
@@ -108,20 +111,25 @@ class LoginAction
             $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$admin) {
-                // ❌ Username not found
-                $message = "Access Denied: Invalid username.";
-                $messageType = 'error';
-                echo "Invalid username.";
-                return;
+                return json_encode([
+                    "success" => false,
+                    "error" => "user not found.",
+                    "message" => "Invalid credintials."
+                ]);
             } else {
                 if ($admin && password_verify($this->submittedPassword, $admin['password_hash'])) {
-                    // ✅ Code matches and is active
+                    //  Code matches and is active
                     $_SESSION['access_granted'] = true;
                     $_SESSION['authenticated_user'] = $admin['username'];
                     $_SESSION['auth_time'] = time();
 
-                    $message = "Access Granted! Welcome, " . htmlspecialchars($admin['username']) . ".";
-                    $messageType = 'success';
+                    // $message = "Access Granted! Welcome, " . htmlspecialchars($admin['username']) . ".";
+                    // $messageType = 'success';
+
+                    return json_encode([
+                        "success" => true,
+                        "message" => "Access Granted! Welcome, " . htmlspecialchars($admin['username']). "."
+                    ]);
 
 
                     // Redirect to dashboard after successful access
@@ -130,47 +138,54 @@ class LoginAction
                     header("Location: ../logs.php");
                     exit;
                 } else {
-                    // ❌ Code does not match or is not active
-                    $message = "Access Denied: Invalid or inactive access code.";
-                    $messageType = 'error';
-                    echo "Invalid username or password.";
-                    echo "$admin[username]";
-                    echo "$admin[password_hash]";
-                    echo " $this->submittedPassword";
+                    //  Code does not match or is not active
+                    // $message = "Access Denied: Invalid or inactive access code.";
+                    // $messageType = 'error';
+                    // echo "Invalid username or password.";
+                    // echo "$admin[username]";
+                    // echo "$admin[password_hash]";
+                    // echo " $this->submittedPassword";
 
-                    // Log failure
-                    // $logStmt = $this->conn->prepare("INSERT INTO access_logs (code_used, status, timestamp) VALUES (?, 'Fail', NOW())");
-                    // $logStmt->execute([$submittedCode]);
+                    return json_encode([
+                    "success" => false,
+                    "error" => "Invalid username or password.<br>",
+                    "message" => "Invalid credintials.<br>"
+                ]);
                 }
             }
         } catch (Exception $e) {
             $message = "An unexpected error occurred. Please try again later.";
             $messageType = 'error';
+            return json_encode([
+                    "success" => false,
+                    "error" => error_log("Login error: " . $e->getMessage()),
+                    "message" => "Invalid credintials.<br>"
+                ]);
 
             // Optional: Log the actual error for debugging
-            error_log("Login error: " . $e->getMessage());
+            // error_log("Login error: " . $e->getMessage());
         }
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $submittedCode = $_POST['access_code'] ?? '';
-    $submittedUsername = $_POST['username'] ?? '';
-    $submittedPassword = $_POST['password'] ?? '';
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $submittedCode = $_POST['access_code'] ?? '';
+//     $submittedUsername = $_POST['username'] ?? '';
+//     $submittedPassword = $_POST['password'] ?? '';
 
 
-    if (!empty($submittedCode) && trim($submittedCode) !== '') {
-        // $myObj = new LoginAction();
-        // $myObj->handlePasscode($submittedCode);
-    }
+//     if (!empty($submittedCode) && trim($submittedCode) !== '') {
+//         // $myObj = new LoginAction();
+//         // $myObj->handlePasscode($submittedCode);
+//     }
 
-    if (!empty($submittedUsername) && trim($submittedUsername) !== '' && !empty($submittedPassword) && trim($submittedPassword) !== '') {
-        // echo "$submittedUsername, $submittedPassword";
-        // $myObj = new LoginAction();
-        // $myObj->admin_login($submittedUsername, $submittedPassword);
-        // $myObj->handlePasscode($submittedCode);
-    }
-}
+//     if (!empty($submittedUsername) && trim($submittedUsername) !== '' && !empty($submittedPassword) && trim($submittedPassword) !== '') {
+//         // echo "$submittedUsername, $submittedPassword";
+//         // $myObj = new LoginAction();
+//         // $myObj->admin_login($submittedUsername, $submittedPassword);
+//         // $myObj->handlePasscode($submittedCode);
+//     }
+// }
 
 
 //             $sql = "SELECT * FROM admins WHERE username = :username";
