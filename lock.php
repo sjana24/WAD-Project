@@ -23,7 +23,7 @@ unset($_SESSION['login_message_type']);
 
   <div class="lock-container">
     <h1>🔒 Enter Access Code</h1>
-    <form method="POST" action="actions/login_action.php" class="keypad-mode">
+    <form method="POST" action="actions/main_action.php" class="keypad-mode">
       <div class="form-group">
         <input type="password" name="access_code" id="accessCode" placeholder="••••" maxlength="4" required readonly />
       </div>
