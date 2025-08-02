@@ -2,10 +2,6 @@
 // lock.php
 session_start();
 
-// Get message from session (set by login_action.php)
-$message = $_SESSION['login_message'] ?? '';
-$messageType = $_SESSION['login_message_type'] ?? '';
-
 // Clear the session messages after displaying
 unset($_SESSION['login_message']);
 unset($_SESSION['login_message_type']);

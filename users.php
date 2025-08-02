@@ -98,6 +98,12 @@ $codes = $codeManager->getAllCodes();
             <td><?= htmlspecialchars($row['code']) ?></td>
             <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
             <td><?= htmlspecialchars($row['status'] ?? '-') ?></td> 
+            <td>
+                <form action="./actions/main_action.php" method="post">
+                    
+                    <input type="submit" name="status" value="abc"/>
+                </form>
+            </td>
             
         </tr>
     <?php endforeach; ?>
