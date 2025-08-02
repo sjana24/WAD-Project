@@ -16,8 +16,7 @@ class LoginAction{
         // Initialize message and type
         $this->conn = (new dbConnect())->connect();
         if (!$this->conn) {
-            // $message = "";
-            // $messageType = 'error';
+                        
             return json_encode([
                     "success" => false,
                     "error" => "db not connect<br>.",
@@ -34,8 +33,8 @@ class LoginAction{
 
         try {
             // Validate access code
-            $stmt = $this->conn->prepare("SELECT * FROM user_data 
-                                       WHERE code = ? AND status = 'active'");
+            $sql="SELECT * FROM user_data WHERE code = ? AND status = 'active'";
+            $stmt = $this->conn->prepare($sql);
             $stmt->execute([$this->submittedCode]);
             $result = $stmt->fetch();
 
@@ -45,33 +44,38 @@ class LoginAction{
                 $_SESSION['authenticated_user'] = $result['username'];
                 $_SESSION['auth_time'] = time();
 
-                $message = "Access Granted! Welcome, " . htmlspecialchars($result['username']) . ".";
-                $messageType = 'success';
+
 
                 // Log success
                 $logStmt = $this->conn->prepare("INSERT INTO access_logs (code_used, status, timestamp) VALUES (?, 'Success', NOW())");
                 $logStmt->execute([$this->submittedCode]);
 
-                // Redirect to dashboard after successful access
-                $_SESSION['login_message'] = $message;
-                $_SESSION['login_message_type'] = $messageType;
-                header("Location: ../index.php");
-                exit;
+                 return json_encode([
+                    "success" => true,
+                    "message" => "Access Granted! Welcome, " . htmlspecialchars($result['username']) . "."
+                ]);
+
             } else {
                 //  Code does not match or is not active
-                $message = "Access Denied: Invalid or inactive access code.";
-                $messageType = 'error';
+
 
                 // Log failure
                 $logStmt = $this->conn->prepare("INSERT INTO access_logs (code_used, status, timestamp) VALUES (?, 'Fail', NOW())");
                 $logStmt->execute([$submittedCode]);
+
+                return json_encode([
+                    "success" => false,
+                    "error" => "user not found.<br>",
+                    "message" => "Access Denied: Invalid or inactive access code.<br>"
+                ]);
             }
         } catch (Exception $e) {
-            $message = "An unexpected error occurred. Please try again later.";
-            $messageType = 'error';
+            return json_encode([
+                    "success" => false,
+                    "error" => error_log("Login error: " . $e->getMessage()).".<br>",
+                    "message" => "An unexpected error occurred. Please try again later.<br>"
+                ]);
 
-            // Optional: Log the actual error for debugging
-            error_log("Login error: " . $e->getMessage());
         }
     }
     // else {

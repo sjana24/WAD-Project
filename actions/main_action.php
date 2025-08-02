@@ -16,7 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //user passcode handle
     if (!empty($submittedCode) && trim($submittedCode) !== '') {
         $myObj = new LoginAction();
-        $myObj->handlePasscode($submittedCode);
+        $response=$myObj->handlePasscode($submittedCode);
+        $data = json_decode($response, true);
+
+        if ($data['success']) {
+            // echo $data['success'];
+            echo $data['message'];
+            // echo $data['code'];
+        } else {
+            echo $data['success'];
+            echo  $data['message'];
+            echo  $data['error'];
+        }
     }
 
     //admin login handle

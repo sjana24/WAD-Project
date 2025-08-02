@@ -12,11 +12,19 @@ class Add_User
     private $existTime;
     public $existTimeLimit = 5;
 
-    // Constructor code here
+    // Constructor code
     public function __construct()
     {
         $myObj = new dbConnect();
         $this->conn = $myObj->connect();
+        if (!$this->conn) {
+
+            return json_encode([
+                "success" => false,
+                "error" => "db not connect<br>.",
+                "message" => "Database connection failed. Please try again later.<br>"
+            ]);
+        }
     }
 
 
@@ -85,11 +93,11 @@ class Add_User
                 }
             }
         }
-    
+
         if ($this->existTime >= $this->existTimeLimit) {
             return json_encode([
                 "success" => false,
-                "erroe"=>"Code already exists, please try again $this->existTimeLimit.",
+                "erroe" => "Code already exists, please try again $this->existTimeLimit.",
                 "message" => "Credincials already used,Try again!"
             ]);
         }
@@ -115,14 +123,13 @@ class Add_User
                         "code" => (int)$this->generatedCode,
                         "message" => "New user added successfully.<br>"
                     ]);
-                } 
+                }
             } else {
                 return json_encode([
-                        "success" => false,
-                        // "username" => $this->username,
-                        // "code" => (int)$this->generatedCode,
-                        "message" => "Unable to add new user.<br>"
-                    ]);
+                    "success" => false,
+                    "error" => "db insert issues",
+                    "message" => "Unable to add new user.<br>"
+                ]);
             }
         } catch (PDOException $e) {
             die("Database error: " . $e->getMessage());
