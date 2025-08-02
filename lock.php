@@ -63,7 +63,7 @@ if (!empty($submittedCode) && trim($submittedCode) !== '') {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home Security System - Lock Screen</title>
-  <link rel="stylesheet" href="assets/css/lock.css">
+  <link rel="stylesheet" href="assests/css/lock.css">
 </head>
 <body>
 
@@ -110,6 +110,6 @@ if (!empty($submittedCode) && trim($submittedCode) !== '') {
     </div>
   </div>
 
-  <script src="assets/js/lock.js"></script>
+  <script src="assests/js/lock.js"></script>
 </body>
 </html>
