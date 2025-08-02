@@ -1,7 +1,7 @@
 <?php
 // lock.php
 session_start();
-require_once 'database.php';
+require_once 'db/config.php';
 
 $message = '';
 $messageType = '';
