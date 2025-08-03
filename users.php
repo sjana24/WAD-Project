@@ -1,7 +1,7 @@
 <?php
-// include "includes/auth.php";
+include "includes/auth.php";
 require_once "actions/getter_main.php";
-session_start();
+// session_start();
 
 
 // Class to manage user codes

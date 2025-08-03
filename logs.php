@@ -1,5 +1,5 @@
 <?php
-// require_once "includes/auth.php";
+require_once "includes/auth.php";
 // require_once "actions/get_all_logs.php";
 require_once "actions/getter_main.php";
 
