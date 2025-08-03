@@ -1,15 +1,18 @@
 <?php
-require_once "includes/auth.php";
-require_once "actions/get_all_logs.php";
+// require_once "includes/auth.php";
+// require_once "actions/get_all_logs.php";
+require_once "actions/getter_main.php";
 
-$log = new AccessLog();
-$logs = $log->getAllLogs();
+$log = new getter_main();
+$logs = $log->get_all_logs();
+
+
+
 ?>
 
 <h2>Access Logs</h2>
 
     
-    <!-- <a href="lock.php">🔒 Lock Screen</a> |  -->
     <!-- <a href="admin_login.php">🔑 Admin Login</a> -->
     <a href="actions/admin_logout.php">🔑 Log out</a>
     <a href="users.php">🔑 Manage user</a>
