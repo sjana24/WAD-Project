@@ -3,10 +3,19 @@ require_once "includes/auth.php";
 // require_once "actions/get_all_logs.php";
 require_once "actions/getter_main.php";
 
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
+header("Pragma: no-cache"); // HTTP 1.0
+header("Expires: 0"); // Proxies
+
 $log = new getter_main();
 $logs = $log->get_all_logs();
 
-
+// Enforce session authentication
+if (!isset($_SESSION['user_id'])) {
+    // User is not logged in → Redirect to login
+    header("Location: admin_login.php");
+    exit;
+}
 
 ?>
 
@@ -14,7 +23,7 @@ $logs = $log->get_all_logs();
 
     
     <!-- <a href="admin_login.php">🔑 Admin Login</a> -->
-    <a href="./lock.php">🔑 Log out</a>
+    <a href="./actions/admin_logout.php">🔑 Log out</a>
     <a href="users.php">🔑 Manage user</a>
 
 
@@ -32,3 +41,12 @@ $logs = $log->get_all_logs();
         </tr>
     <?php endforeach; ?>
 </table>
+<script>
+// Detect if page is loaded from cache (Back Button)
+window.addEventListener( "pageshow", function ( event ) {
+    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        // Reload to fetch fresh session
+        window.location.reload();
+    }
+});
+</script>
