@@ -11,7 +11,7 @@ class UserData {
 
     public function getAllUserDatas() {
         // $sql="SELECT * FROM access_logs ORDER BY timestamp DESC";
-$sql = "SELECT * FROM user_data WHERE delete_status=0";
+$sql = "SELECT id,username,status FROM user_data WHERE delete_status=0";
         $stmt = $this->conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 

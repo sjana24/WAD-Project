@@ -1,26 +1,27 @@
 <?php
-include "includes/auth.php";
+
 require_once './login_action.php';
 require_once './add_user.php';
 require_once './status_mange.php';
 require_once './delete_user.php';
+// require_once './admin_logout.php';
 
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // $submittedCode = $_POST['access_code'] ?? '';
+    $submittedCode = $_POST['access_code'] ?? '';
 
     $submittedUsername = $_POST['username'] ?? '';
     $submittedPassword = $_POST['password'] ?? '';
 
-    // $submittedName = $_POST['name'] ?? '';
-    // $submittedMobileNumber = $_POST['mobile_number'] ?? '';
-    // $submittedNIC = $_POST['nic'] ?? '';
+    $submittedName = $_POST['name'] ?? '';
+    $submittedMobileNumber = $_POST['mobile_number'] ?? '';
+    $submittedNIC = $_POST['nic'] ?? '';
 
-    // $delete_id = $_POST['delete'] ?? '';
+    $delete_id = $_POST['delete'] ?? '';
     
-    // $edit_id = $_POST['edit'] ?? '';
-    // $status=$_POST['status'] ?? '';
+    $edit_id = $_POST['edit'] ?? '';
+    $status=$_POST['status'] ?? '';
     // Sanitize and Validate Inputs
 
 // $submittedCode = isset($_POST['access_code']) ? filter_var(trim($_POST['access_code']), FILTER_SANITIZE_STRING) : '';
@@ -81,12 +82,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($data['success']) {
             // echo $data['success'];
+             $_SESSION['message'] = $data['message'];
             echo $data['message'];
             // echo $data['code'];
+            header("Location: ../users.php");
+            exit;
+            
         } else {
             echo $data['success'];
             echo  $data['message'];
+            $_SESSION['message'] = $data['message'];
             echo  $data['error'];
+            header("Location: ../users.php");
+            exit;
+            
         }
     }
     else{
@@ -100,12 +109,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($data['success']) {
             // echo $data['success'];
             echo $data['message'];
+            $_SESSION['message'] = $data['message'];
             // echo $data['code'];
+            header("Location: ../users.php");
+            exit;
+            
         } else {
             echo $data['success'];
             echo  $data['message'];
+            $_SESSION['message'] = $data['message'];
             echo  $data['error'];
+            header("Location: ../users.php");
+            exit;
         }
+        
+        
     }
     // $response=$myObj->user_status_manage($abc,$updatedStatus)
     // $submittedNIC = $_POST['nic'] ?? '';
@@ -120,10 +138,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($data['success']) {
             // echo $data['success'];
             echo $data['message'];
+            $_SESSION['message'] = $data['message'];
             // echo $data['code'];
         } else {
             echo $data['success'];
             echo  $data['message'];
+            $_SESSION['message'] = $data['message'];
             echo  $data['error'];
         }
     }
@@ -138,6 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($data['success']) {
             // echo $data['success'];
             echo $data['message'];
+            $_SESSION['message'] = $data['message'];
             header("Location: ../users.php");
             // exit;
 
@@ -145,6 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo $data['success'];
             echo  $data['message'];
+            $_SESSION['message'] = $data['message'];
             echo  $data['error'];
             header("Location: ../admin_login.php");
             exit;
@@ -163,12 +185,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($data['success']) {
             echo $data['success'];
             echo $data['message'];
+            $_SESSION['message'] = $data['message'];
             echo $data['code'];
             header("Location: ../users.php");
             exit;
         } else {
             echo $data['success'];
             echo  $data['message'];
+            $_SESSION['message'] = $data['message'];
             header("Location: ../users.php");
             exit;
         }

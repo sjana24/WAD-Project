@@ -33,7 +33,7 @@ if (!isset($_SESSION['user_id'])) {
         <tr>
             <td><?= htmlspecialchars($row['id']) ?></td>
             <td><?= htmlspecialchars($row['username']) ?></td>
-            <td><?= htmlspecialchars($row['code_used']) ?></td>
+            <td><?= htmlspecialchars($row['used_code'] ?? '****') ?></td>
             <td><?= htmlspecialchars($row['status']) ?></td>
             <!-- <td><?= htmlspecialchars($row['status']) ?></td> -->
             <td><?= htmlspecialchars($row['timestamp']) ?></td>
