@@ -17,8 +17,8 @@ class Edit_User
 
             return json_encode([
                 "success" => false,
-                "error" => "db not connect<br>.",
-                "message" => "Database connection failed. Please try again later.<br>"
+                "error" => "db not connect.",
+                "message" => "Database connection failed. Please try again later."
             ]);
         }
     }
@@ -67,14 +67,14 @@ class Edit_User
                         "success" => true,
                         // "username" => $this->username,
                         // "code" => (int)$this->generatedCode,
-                        "message" => "User status updated successfully.<br>"
+                        "message" => "User status updated successfully."
                     ]);
                 }
             } else {
                 return json_encode([
                     "success" => false,
                     "error" => "db insert issues",
-                    "message" => "Unable to add new user.<br>"
+                    "message" => "Unable to add new user."
                 ]);
             }
         } catch (PDOException $e) {

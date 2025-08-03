@@ -13,12 +13,28 @@ class AccessLog {
         // $sql="SELECT * FROM access_logs ORDER BY timestamp DESC";
         $sql = "
 SELECT 
-    access_logs.*, 
-    user_data.username 
+    access_logs.id,
+    CASE 
+        WHEN user_data.username IS NOT NULL THEN user_data.username 
+        ELSE 'Unknown' 
+    END AS username,
+    CASE 
+        WHEN user_data.username IS NULL THEN access_logs.code_used 
+        ELSE NULL 
+    END AS used_code,
+    access_logs.status,
+    access_logs.timestamp
 FROM access_logs
-JOIN user_data ON access_logs.code_used = user_data.code
-ORDER BY access_logs.timestamp DESC
+LEFT JOIN user_data ON access_logs.code_used = user_data.code
+ORDER BY access_logs.timestamp DESC;
+
 ";
+//         $sql = "
+// SELECT 
+//     access_logs.* 
+// FROM access_logs
+// ORDER BY access_logs.timestamp DESC
+// ";
 
         $stmt = $this->conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

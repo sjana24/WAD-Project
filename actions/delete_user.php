@@ -29,14 +29,14 @@ class Delete_User {
                         "success" => true,
                         // "username" => $this->username,
                         // "code" => (int)$this->generatedCode,
-                        "message" => "User deleted successfully.<br>"
+                        "message" => "User deleted successfully."
                     ]);
                 }
             } else {
                 return json_encode([
                     "success" => false,
                     "error" => "db insert issues",
-                    "message" => "Unable to add new user.<br>"
+                    "message" => "Unable to add new user."
                 ]);
             }
         } catch (PDOException $e) {

@@ -16,8 +16,13 @@ class UserCodeManager
     {
         $myObj=new getter_main();
         
-        if (isset($_SESSION['user_id'])) {
-            echo "Logged in as: " . htmlspecialchars($_SESSION['user_id']);
+        if (isset($_SESSION['message'])) {
+            // echo "Logged in as: " . htmlspecialchars($_SESSION['user_id']);
+            // echo "<script>alert({$_SESSION['message']});</script>";
+            $msg = htmlspecialchars($_SESSION['message'], ENT_QUOTES);
+    echo "<script>alert('{$msg}');</script>";
+    unset($_SESSION['message']);  // clear the message after showing
+
         }
 
         if (isset($_SESSION['auth_times'])) {
@@ -57,11 +62,6 @@ if (!isset($_SESSION['user_id'])) {
     <h2>User Datas</h2>
     <a href="logs.php">View Access Logs</a>
     <a href="./actions/admin_logout.php">🔑 Log out</a>
-    <form action="" method="">
-        <input type="hidden">
-        <input type="button" onclick="" value="jana">
-        <!-- <input type="submit" value=""> -->
-    </form>
     <?php 
     if(1){
         ?>
@@ -80,16 +80,16 @@ if (!isset($_SESSION['user_id'])) {
     <table border="1">
         <tr>
             <th>ID</th>
-            <th>Code</th>
+            <!-- <th>Code</th> -->
             <th>Username</th>
             <th colspan="2">Action</th>
         </tr>
         <?php foreach ($code as $row): ?>
             <tr>
                 <td><?= htmlspecialchars($row['id']) ?></td>
-                <td><?= htmlspecialchars($row['code']) ?></td>
+                
                 <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
-                <!-- <td><?= htmlspecialchars($row['status'] ?? '-') ?></td> -->
+                
                 <td>
                     <form action="./actions/main_action.php" method="post">
                         <input type="hidden" name="edit" value="<?= htmlspecialchars($row['id']) ?>" />

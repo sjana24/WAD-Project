@@ -1,5 +1,5 @@
 <?php
-include "includes/auth.php";
+
 require_once "get_all_logs.php";
 require_once "get_all_userDatas.php";
 
