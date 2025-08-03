@@ -1,6 +1,8 @@
 <?php
 require_once './login_action.php';
 require_once './add_user.php';
+require_once './status_mange.php';
+require_once './delete_user.php';
 
 
 
@@ -13,8 +15,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $submittedMobileNumber = $_POST['mobile_number'] ?? '';
     $submittedNIC = $_POST['nic'] ?? '';
 
-    $xyz = $_POST['xyz'] ?? '';
-    echo $xyz;
+    $delete_id = $_POST['delete'] ?? '';
+    
+    $edit_id = $_POST['edit'] ?? '';
+    $status=$_POST['status'] ?? '';
+    if (!empty($delete_id) || !empty($edit_id))
+    if(!empty($delete_id)){
+        // echo "delete id is-".$delete_id;
+        $myObj=new Delete_User();
+    // $updatedStatus=$status=== "active" ? "inactive" :"active";
+    echo "<br>delete id is".$delete_id."-";
+    $response=$myObj->deleteUser($delete_id);
+    $data = json_decode($response, true);
+
+        if ($data['success']) {
+            // echo $data['success'];
+            echo $data['message'];
+            // echo $data['code'];
+        } else {
+            echo $data['success'];
+            echo  $data['message'];
+            echo  $data['error'];
+        }
+    }
+    else{
+    // echo "<br>edit id is-".$edit_id;
+    $myObj=new Edit_User();
+    $updatedStatus=$status=== "active" ? "inactive" :"active";
+    echo "<br>edit id is".$edit_id."-".$updatedStatus;
+    $response=$myObj->user_status_manage($edit_id,$updatedStatus);
+    $data = json_decode($response, true);
+
+        if ($data['success']) {
+            // echo $data['success'];
+            echo $data['message'];
+            // echo $data['code'];
+        } else {
+            echo $data['success'];
+            echo  $data['message'];
+            echo  $data['error'];
+        }
+    }
+    // $response=$myObj->user_status_manage($abc,$updatedStatus)
     // $submittedNIC = $_POST['nic'] ?? '';
 
 

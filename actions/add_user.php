@@ -31,7 +31,7 @@ class Add_User
     public function isExistingUser($code)
     {
         try {
-            $sql = "SELECT COUNT(*) FROM user_data WHERE code = :code";
+            $sql = "SELECT COUNT(*) FROM user_data WHERE code = :code AND status = 'active'";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([':code' => (int) $code]);
             $count = $stmt->fetchColumn();

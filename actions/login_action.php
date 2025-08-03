@@ -3,7 +3,8 @@
 session_start();
 require_once '../db/config.php';
 
-class LoginAction{
+class LoginAction
+{
 
 
     private $conn;
@@ -16,12 +17,12 @@ class LoginAction{
         // Initialize message and type
         $this->conn = (new dbConnect())->connect();
         if (!$this->conn) {
-                        
+
             return json_encode([
-                    "success" => false,
-                    "error" => "db not connect<br>.",
-                    "message" => "Database connection failed. Please try again later.<br>"
-                ]);
+                "success" => false,
+                "error" => "db not connect<br>.",
+                "message" => "Database connection failed. Please try again later.<br>"
+            ]);
         }
     }
 
@@ -33,49 +34,72 @@ class LoginAction{
 
         try {
             // Validate access code
-            $sql="SELECT * FROM user_data WHERE code = ? AND status = 'active'";
+            $sql = "SELECT * FROM user_data WHERE code = ? AND status = 'active'";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$this->submittedCode]);
             $result = $stmt->fetch();
 
             if ($result) {
                 // Code matches and is active
-                $_SESSION['access_granted'] = true;
-                $_SESSION['authenticated_user'] = $result['username'];
-                $_SESSION['auth_time'] = time();
+                // $_SESSION['access_granted'] = true;
+                // $_SESSION['authenticated_user'] = $result['username'];
+                // $_SESSION['auth_time'] = time();
 
 
 
                 // Log success
-                $logStmt = $this->conn->prepare("INSERT INTO access_logs (code_used, status, timestamp) VALUES (?, 'Success', NOW())");
-                $logStmt->execute([$this->submittedCode]);
-
-                 return json_encode([
-                    "success" => true,
-                    "message" => "Access Granted! Welcome, " . htmlspecialchars($result['username']) . "."
+                $sql = "INSERT INTO access_logs (code_used, status, timestamp) VALUES (:code_used, :status, NOW())";
+                $stmt = $this->conn->prepare($sql);
+                $success = $stmt->execute([
+                    ':code_used' => $this->submittedCode,
+                    ':status' => 'Success'
                 ]);
 
+                // $affectedRows = $logStmt->rowCount();
+
+
+                if ($success) {
+                    // echo "Log entry created successfully.";
+                    return json_encode([
+                        "success" => true,
+                        "message" => "Access Granted! Welcome, " . htmlspecialchars($result['username']) . "."
+                    ]);
+                }
             } else {
                 //  Code does not match or is not active
 
 
                 // Log failure
-                $logStmt = $this->conn->prepare("INSERT INTO access_logs (code_used, status, timestamp) VALUES (?, 'Fail', NOW())");
-                $logStmt->execute([$submittedCode]);
-
-                return json_encode([
-                    "success" => false,
-                    "error" => "user not found.<br>",
-                    "message" => "Access Denied: Invalid or inactive access code.<br>"
+                $sql = "INSERT INTO access_logs (code_used, status, timestamp) VALUES (:code_used, :status, NOW())";
+                $stmt = $this->conn->prepare($sql);
+                $success = $stmt->execute([
+                    ':code_used' => $this->submittedCode,
+                    ':status' => 'Fail'
                 ]);
+
+
+                if ($success) {
+                    // Insert was successful
+                    return json_encode([
+                        "success" => false,
+                        "error" => "User not found.<br>",
+                        "message" => "Access Denied: Invalid or inactive access code.<br>"
+                    ]);
+                } else {
+                    // Insert failed (unlikely but possible)
+                    return json_encode([
+                        "success" => false,
+                        "error" => "Failed to log attempt.",
+                        "message" => "An unexpected error occurred while logging the failed attempt."
+                    ]);
+                }
             }
         } catch (Exception $e) {
             return json_encode([
-                    "success" => false,
-                    "error" => error_log("Login error: " . $e->getMessage()).".<br>",
-                    "message" => "An unexpected error occurred. Please try again later.<br>"
-                ]);
-
+                "success" => false,
+                "error" => error_log("Login error: " . $e->getMessage()) . ".<br>",
+                "message" => "An unexpected error occurred. Please try again later.<br>"
+            ]);
         }
     }
     // else {
@@ -132,7 +156,7 @@ class LoginAction{
 
                     return json_encode([
                         "success" => true,
-                        "message" => "Access Granted! Welcome, " . htmlspecialchars($admin['username']). "."
+                        "message" => "Access Granted! Welcome, " . htmlspecialchars($admin['username']) . "."
                     ]);
 
 
@@ -151,20 +175,20 @@ class LoginAction{
                     // echo " $this->submittedPassword";
 
                     return json_encode([
-                    "success" => false,
-                    "error" => "Invalid username or password.<br>",
-                    "message" => "Invalid credintials.<br>"
-                ]);
+                        "success" => false,
+                        "error" => "Invalid username or password.<br>",
+                        "message" => "Invalid credintials.<br>"
+                    ]);
                 }
             }
         } catch (Exception $e) {
             $message = "An unexpected error occurred. Please try again later.";
             $messageType = 'error';
             return json_encode([
-                    "success" => false,
-                    "error" => error_log("Login error: " . $e->getMessage()),
-                    "message" => "Invalid credintials.<br>"
-                ]);
+                "success" => false,
+                "error" => error_log("Login error: " . $e->getMessage()),
+                "message" => "Invalid credintials.<br>"
+            ]);
 
             // Optional: Log the actual error for debugging
             // error_log("Login error: " . $e->getMessage());

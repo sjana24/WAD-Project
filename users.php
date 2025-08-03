@@ -5,39 +5,42 @@ include "db/config.php";
 // include "./actions/delete_user.php";
 
 // Class to manage user codes
-class UserCodeManager {
+class UserCodeManager
+{
     private $conn;
 
-    public function __construct() {
-        $myObj=new dbConnect();
+    public function __construct()
+    {
+        $myObj = new dbConnect();
         $this->conn = $myObj->connect();
     }
 
-    public function getAllCodes() {
-        $sql = "SELECT * FROM user_data";
+    public function getAllCodes()
+    {
+        $sql = "SELECT * FROM user_data WHERE delete_status=0";
         $stmt = $this->conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-   
+
 
     // 
-    
-//     function generateAccessCode($mobile, $nationalId) {
-//     $input = $mobile . $nationalId;
 
-//     // Step 1: Create hash (secure and irreversible)
-//     $hash = hash('sha256', $input);
+    //     function generateAccessCode($mobile, $nationalId) {
+    //     $input = $mobile . $nationalId;
 
-//     // Step 2: Convert part of hash to number
-//     $decimal = crc32($hash); // or use hexdec(substr($hash, 0, 8));
+    //     // Step 1: Create hash (secure and irreversible)
+    //     $hash = hash('sha256', $input);
 
-//     // Step 3: Get 4-digit code from it
-//     $code = $decimal % 10000;
+    //     // Step 2: Convert part of hash to number
+    //     $decimal = crc32($hash); // or use hexdec(substr($hash, 0, 8));
 
-//     // Step 4: Pad with zeros (e.g., 0034)
-//     return str_pad($code, 4, '0', STR_PAD_LEFT);
-// }
+    //     // Step 3: Get 4-digit code from it
+    //     $code = $decimal % 10000;
+
+    //     // Step 4: Pad with zeros (e.g., 0034)
+    //     return str_pad($code, 4, '0', STR_PAD_LEFT);
+    // }
 }
 
 // Create object and database connection
@@ -53,9 +56,9 @@ $codeManager = new UserCodeManager();
 //     $number=$_POST['mobile_number'];
 //     $nic=$_POST['nic'];
 //     $code = $codeManager->generateAccessCode($number, $nic);
-    
+
 //     // $addUser->addUser($name, $code);
-    
+
 //     header("Location: users.php");
 //     exit;
 // }
@@ -75,36 +78,55 @@ $codeManager = new UserCodeManager();
 // Fetch all codes
 $codes = $codeManager->getAllCodes();
 ?>
-
+<!DOCTYPE html>
+<head>
+    <title>User Codes</title>
+</head>
+<body>
 <!-- HTML Output -->
 <h2>User Datas</h2>
 <a href="logs.php">View Access Logs</a>
-<a href="actions/admin_logout.php">🔑 Log out</a>
+<a href="./lock.php">🔑 Log out</a>
 <form method="POST" action="./actions/main_action.php">
-    <label id="name" >Name:</label>
+    <label id="name">Name:</label>
     <input type="text" name="name" placeholder="Enter new name" required /><br>
-    <label id="mobile_number" >Mobile Number:</label>
+    <label id="mobile_number">Mobile Number:</label>
     <input type="text" name="mobile_number" placeholder="Enter mobile number" required /><br>
-    <label id="nic" >NIC:</label>
+    <label id="nic">NIC:</label>
     <input type="text" name="nic" placeholder="Enter NIC" required /></br>
     <button type="submit">Add Code</button>
 </form>
 
 <table border="1">
-    <tr><th>ID</th><th>Code</th><th>Username</th><th colspan="2">Action</th></tr>
+    <tr>
+        <th>ID</th>
+        <th>Code</th>
+        <th>Username</th>
+        <th colspan="2">Action</th>
+    </tr>
     <?php foreach ($codes as $row): ?>
         <tr>
             <td><?= htmlspecialchars($row['id']) ?></td>
             <td><?= htmlspecialchars($row['code']) ?></td>
             <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($row['status'] ?? '-') ?></td> 
+            <!-- <td><?= htmlspecialchars($row['status'] ?? '-') ?></td> -->
             <td>
                 <form action="./actions/main_action.php" method="post">
-                    
-                    <input type="submit" name="status" value="abc"/>
+                    <input type="hidden" name="edit" value="<?= htmlspecialchars($row['id']) ?>" />
+                    <input type="submit" name="status" value="<?= htmlspecialchars($row['status']) ?>" />
                 </form>
             </td>
-            
+            <td>
+                 <form action="./actions/main_action.php" method="post">
+                    <input type="hidden" name="delete" value="<?= htmlspecialchars($row['id']) ?>" />
+                    <input type="submit" name="status" value="Delete" />
+                </form>
+            </td>
+
         </tr>
     <?php endforeach; ?>
 </table>
+
+</body>
+
+</html>
