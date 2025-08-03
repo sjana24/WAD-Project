@@ -1,7 +1,9 @@
 <?php
 include "includes/auth.php";
 require_once "actions/getter_main.php";
-// session_start();
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
+header("Pragma: no-cache"); // HTTP 1.0
+header("Expires: 0"); // Proxies
 
 
 // Class to manage user codes
@@ -44,10 +46,22 @@ $code = $codeManager->codes;
 </head>
 
 <body>
+    <?php
+if (!isset($_SESSION['user_id'])) {
+    header("Location: admin_login.php");
+    exit();
+}
+?>
+
     <!-- HTML Output -->
     <h2>User Datas</h2>
     <a href="logs.php">View Access Logs</a>
     <a href="./actions/admin_logout.php">🔑 Log out</a>
+    <form action="" method="">
+        <input type="hidden">
+        <input type="button" onclick="" value="jana">
+        <!-- <input type="submit" value=""> -->
+    </form>
     <?php 
     if(1){
         ?>
@@ -94,5 +108,27 @@ $code = $codeManager->codes;
     </table>
 
 </body>
+<!-- <script>
+    sesssion_start();
+    if (isset($_SESSION['user_id'])) {
+            // echo "Logged in as: " . htmlspecialchars($_SESSION['user_id']);
+            setTimeout(function() {
+        location.reload();
+    }, 3000); // Reload after 3 seconds
+        }
+    
+</script> -->
+<script>
+// Detect if page is loaded from cache (Back Button)
+window.addEventListener( "pageshow", function ( event ) {
+    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        // Reload to fetch fresh session
+        window.location.reload();
+    }
+});
+</script>
+
+
+
 
 </html>

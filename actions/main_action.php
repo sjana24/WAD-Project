@@ -1,4 +1,5 @@
 <?php
+include "includes/auth.php";
 require_once './login_action.php';
 require_once './add_user.php';
 require_once './status_mange.php';
