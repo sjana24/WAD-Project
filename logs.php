@@ -14,7 +14,7 @@ $logs = $log->get_all_logs();
 
     
     <!-- <a href="admin_login.php">🔑 Admin Login</a> -->
-    <a href="actions/admin_logout.php">🔑 Log out</a>
+    <a href="./lock.php">🔑 Log out</a>
     <a href="users.php">🔑 Manage user</a>
 
 
@@ -26,6 +26,7 @@ $logs = $log->get_all_logs();
             <td><?= htmlspecialchars($row['username']) ?></td>
             <td><?= htmlspecialchars($row['code_used']) ?></td>
             <td><?= htmlspecialchars($row['status']) ?></td>
+            <!-- <td><?= htmlspecialchars($row['status']) ?></td> -->
             <td><?= htmlspecialchars($row['timestamp']) ?></td>
             
         </tr>

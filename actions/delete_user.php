@@ -5,21 +5,40 @@ require_once "../db/config.php";
 // $conn->query("INSERT INTO user_codes (code) VALUES ('$code')");
 // header("Location: ../users.php");
 
-class delete_user {
+class Delete_User {
     private $conn;
-    public function __construct($conn) {
+    public function __construct() {
         // Constructor code here
         $myObj = new dbConnect();
         // $this->conn = $myObj->connect();
-        $this->conn = $conn;
+        $this->conn = $myObj->connect();
         
     }
 
     public function deleteUser($id) {
         try {
-            $sql = "DELETE FROM user_data WHERE id = :id";
+           $sql = "UPDATE user_data SET delete_status = 1,status ='inactive', updated_at = NOW() WHERE id = :id";
+
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':id' => $id]);
+            $success=$stmt->execute([':id' => $id]);
+
+             if ($success) {
+                $affectedRows = $stmt->rowCount();  // <-- Get number of affected rows
+                if ($affectedRows > 0) {
+                    return json_encode([
+                        "success" => true,
+                        // "username" => $this->username,
+                        // "code" => (int)$this->generatedCode,
+                        "message" => "User deleted successfully.<br>"
+                    ]);
+                }
+            } else {
+                return json_encode([
+                    "success" => false,
+                    "error" => "db insert issues",
+                    "message" => "Unable to add new user.<br>"
+                ]);
+            }
         } catch (PDOException $e) {
             die("Database error: " . $e->getMessage());
         }

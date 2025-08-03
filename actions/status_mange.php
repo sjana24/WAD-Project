@@ -2,10 +2,11 @@
 require_once '../db/config.php';
 
 
-class Add_User
+class Edit_User
 {
     private $conn;
     private $id;
+    private $status;
 
     // Constructor code
     public function __construct()
@@ -38,11 +39,11 @@ class Add_User
 
     
 
-    public function user_status_manage($id)
+    public function user_status_manage($id,$status)
     {
         // $this->username = $username;
         $this->id = $id;
-        // $this->mobileNumber = $mobileNumber;
+        $this->status = $status;
 
         if (($this->isExistingUser($this->id))) {
 
@@ -50,13 +51,13 @@ class Add_User
             
         $sql = "UPDATE user_data 
         SET status = :status, updated_at = NOW() 
-        WHERE code = :code";
+        WHERE id = :id";
 
         $stmt = $this->conn->prepare($sql);
 
         $success = $stmt->execute([
-            ':status' => 'active',  // or 'inactive', or dynamic value
-            ':code' => (int)$this->generatedCode
+            ':status' =>$this->status,  // or 'inactive', or dynamic value
+            ':id' => (int)$this->id
         ]);
 
             if ($success) {
@@ -64,9 +65,9 @@ class Add_User
                 if ($affectedRows > 0) {
                     return json_encode([
                         "success" => true,
-                        "username" => $this->username,
-                        "code" => (int)$this->generatedCode,
-                        "message" => "New user added successfully.<br>"
+                        // "username" => $this->username,
+                        // "code" => (int)$this->generatedCode,
+                        "message" => "User status updated successfully.<br>"
                     ]);
                 }
             } else {
