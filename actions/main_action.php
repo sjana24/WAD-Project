@@ -7,18 +7,68 @@ require_once './delete_user.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $submittedCode = $_POST['access_code'] ?? '';
+    // $submittedCode = $_POST['access_code'] ?? '';
+
     $submittedUsername = $_POST['username'] ?? '';
     $submittedPassword = $_POST['password'] ?? '';
 
-    $submittedName = $_POST['name'] ?? '';
-    $submittedMobileNumber = $_POST['mobile_number'] ?? '';
-    $submittedNIC = $_POST['nic'] ?? '';
+    // $submittedName = $_POST['name'] ?? '';
+    // $submittedMobileNumber = $_POST['mobile_number'] ?? '';
+    // $submittedNIC = $_POST['nic'] ?? '';
 
-    $delete_id = $_POST['delete'] ?? '';
+    // $delete_id = $_POST['delete'] ?? '';
     
-    $edit_id = $_POST['edit'] ?? '';
-    $status=$_POST['status'] ?? '';
+    // $edit_id = $_POST['edit'] ?? '';
+    // $status=$_POST['status'] ?? '';
+    // Sanitize and Validate Inputs
+
+// $submittedCode = isset($_POST['access_code']) ? filter_var(trim($_POST['access_code']), FILTER_SANITIZE_STRING) : '';
+// if (!preg_match('/^\d{4}$/', $submittedCode)) {
+//     $submittedCode = ''; // Invalid code format (expecting 4-digit code)
+// }
+
+// $submittedUsername = isset($_POST['username']) ? filter_var(trim($_POST['username']), FILTER_SANITIZE_STRING) : '';
+// if (!preg_match('/^[a-zA-Z0-9_]{3,50}$/', $submittedUsername)) {
+//     $submittedUsername = ''; // Invalid username
+// }
+
+// $submittedPassword = isset($_POST['password']) ? filter_var(trim($_POST['password']), FILTER_SANITIZE_STRING) : '';
+// if (strlen($submittedPassword) < 6) {
+//     $submittedPassword = ''; // Weak password
+// }
+
+// $submittedName = isset($_POST['name']) ? filter_var(trim($_POST['name']), FILTER_SANITIZE_STRING) : '';
+// if (!preg_match('/^[a-zA-Z ]{2,100}$/', $submittedName)) {
+//     $submittedName = ''; // Invalid name
+// }
+
+// $submittedMobileNumber = isset($_POST['mobile_number']) ? filter_var(trim($_POST['mobile_number']), FILTER_SANITIZE_STRING) : '';
+// if (!preg_match('/^\d{10,15}$/', $submittedMobileNumber)) {
+//     $submittedMobileNumber = ''; // Invalid mobile number
+// }
+
+// $submittedNIC = isset($_POST['nic']) ? filter_var(trim($_POST['nic']), FILTER_SANITIZE_STRING) : '';
+// if (!preg_match('/^[0-9]{9}[vVxX]?$|^[0-9]{12}$/', $submittedNIC)) {
+//     $submittedNIC = ''; // Invalid NIC (Old or New format)
+// }
+
+// $delete_id = isset($_POST['delete']) ? filter_var(trim($_POST['delete']), FILTER_SANITIZE_NUMBER_INT) : '';
+// if (!is_numeric($delete_id)) {
+//     $delete_id = ''; // Invalid delete id
+// }
+
+// $edit_id = isset($_POST['edit']) ? filter_var(trim($_POST['edit']), FILTER_SANITIZE_NUMBER_INT) : '';
+// if (!is_numeric($edit_id)) {
+//     $edit_id = ''; // Invalid edit id
+// }
+
+// $status = isset($_POST['status']) ? filter_var(trim($_POST['status']), FILTER_SANITIZE_STRING) : '';
+// if (!in_array($status, ['active', 'inactive', 'deleted'])) {
+//     $status = ''; // Invalid status value
+// }
+
+
+
     if (!empty($delete_id) || !empty($edit_id))
     if(!empty($delete_id)){
         // echo "delete id is-".$delete_id;
@@ -88,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // echo $data['success'];
             echo $data['message'];
             header("Location: ../users.php");
-            exit;
+            // exit;
 
             // echo $data['code'];
         } else {
