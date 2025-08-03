@@ -147,9 +147,15 @@ class LoginAction
             } else {
                 if ($admin && password_verify($this->submittedPassword, $admin['password_hash'])) {
                     //  Code matches and is active
-                    $_SESSION['access_granted'] = true;
-                    $_SESSION['authenticated_user'] = $admin['username'];
-                    $_SESSION['auth_time'] = time();
+                    // $_SESSION['access_granted'] = true;
+                    // $_SESSION['authenticated_user'] = $admin['username'];
+                    // $_SESSION['auth_time'] = time();
+                    // $_SESSION['username'] = $submittedUsername;
+                    date_default_timezone_set('Asia/Colombo');
+                    $_SESSION['user_id'] = $admin['id'];  // Example user ID
+                    $_SESSION['auth_times'] = date('Y-m-d H:i:s'); // Store current timestamp
+                    $_SESSION['status'] = 'active';   // Example custom session value
+
 
                     // $message = "Access Granted! Welcome, " . htmlspecialchars($admin['username']) . ".";
                     // $messageType = 'success';
@@ -161,10 +167,10 @@ class LoginAction
 
 
                     // Redirect to dashboard after successful access
-                    $_SESSION['login_message'] = $message;
-                    $_SESSION['login_message_type'] = $messageType;
-                    header("Location: ../logs.php");
-                    exit;
+                    // $_SESSION['login_message'] = $message;
+                    // $_SESSION['login_message_type'] = $messageType;
+                    // header("Location: ../logs.php");
+                    // exit;
                 } else {
                     //  Code does not match or is not active
                     // $message = "Access Denied: Invalid or inactive access code.";
