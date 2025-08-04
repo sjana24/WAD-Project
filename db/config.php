@@ -8,7 +8,7 @@ class dbConnect {
     private $user = "root";
     private $pass = "";
 
-    public function connect() {
+    private function connect() {
        
         try {
             $this->conn = new PDO("mysql:host=$this->host;dbname=$this->db", $this->user, $this->pass);
@@ -19,14 +19,10 @@ class dbConnect {
             return null;
         }
     }
-}
-// db/config.php
-// $host = "localhost";
-// $db = "security_system";
-// $user = "root";
-// $pass = "";
 
-// $conn = new mysqli($host, $user, $pass, $db);
-// if ($conn->connect_error) {
-//     die("Connection failed: " . $conn->connect_error);
-// }
+    public function getConnect(){
+        return $this->connect();
+    }
+}
+
+
