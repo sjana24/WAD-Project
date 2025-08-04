@@ -14,30 +14,33 @@ class UserCodeManager
 
     public function __construct()
     {
-        $myObj=new getter_main();
-        
+        $myObj = new getter_main();
+
         if (isset($_SESSION['message'])) {
-            // echo "Logged in as: " . htmlspecialchars($_SESSION['user_id']);
-            // echo "<script>alert({$_SESSION['message']});</script>";
+
             $msg = htmlspecialchars($_SESSION['message'], ENT_QUOTES);
-    echo "<script>alert('{$msg}');</script>";
-    unset($_SESSION['message']);  // clear the message after showing
+            echo "<script>alert('{$msg}');</script>";
+            unset($_SESSION['message']);  // clear the message after showing
+
+        }
+        if (isset($_SESSION['code'])) {
+
+            $msg = htmlspecialchars($_SESSION['code'], ENT_QUOTES);
+            echo "<script>alert('Your code is-{$msg}');</script>";
+            unset($_SESSION['code']);  // clear the message after showing
 
         }
 
-        if (isset($_SESSION['auth_times'])) {
-            echo "<br>Login Time: " .$_SESSION['auth_times'];
-        }
+        // if (isset($_SESSION['auth_times'])) {
+        //     echo "<br>Login Time: " . $_SESSION['auth_times'];
+        // }
 
-        if (isset($_SESSION['status'])) {
-            echo "<br>Status: " . $_SESSION['status'];
-        }
-         $this->codes = $myObj->get_all_userDatas();
+        // if (isset($_SESSION['status'])) {
+        //     echo "<br>Status: " . $_SESSION['status'];
+        // }
+        $this->codes = $myObj->getAllUserDatas();
         // print_r($this->codes); // Debugging line
     }
-
-  
-
 }
 
 $codeManager = new UserCodeManager();
@@ -52,30 +55,34 @@ $code = $codeManager->codes;
 
 <body>
     <?php
-if (!isset($_SESSION['user_id'])) {
-    header("Location: admin_login.php");
-    exit();
-}
-?>
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: admin_login.php");
+        exit();
+    }
+    ?>
 
     <!-- HTML Output -->
     <h2>User Datas</h2>
     <a href="logs.php">View Access Logs</a>
-    <a href="./actions/admin_logout.php">🔑 Log out</a>
-    <?php 
-    if(1){
-        ?>
-    <form method="POST" action="./actions/main_action.php">
-        <label id="name">Name:</label>
-        <input type="text" name="name" placeholder="Enter new name" required /><br>
-        <label id="mobile_number">Mobile Number:</label>
-        <input type="text" name="mobile_number" placeholder="Enter mobile number" required /><br>
-        <label id="nic">NIC:</label>
-        <input type="text" name="nic" placeholder="Enter NIC" required /></br>
-        <button type="submit">Add Code</button>
+    <!-- <a onclick="" valu href="./actions/admin_logout.php">🔑 Log out</a> -->
+    <form action="./actions/main_action.php" method="post">
+        <input type="hidden" name="logout" value="1" />
+        <input type="submit" name="status" value="Logout" />
     </form>
     <?php
-    }?>
+    if (1) {
+    ?>
+        <form method="POST" action="./actions/main_action.php">
+            <label id="name">Name:</label>
+            <input type="text" name="name" placeholder="Enter new name" required /><br>
+            <label id="mobile_number">Mobile Number:</label>
+            <input type="text" name="mobile_number" placeholder="Enter mobile number" required /><br>
+            <label id="nic">NIC:</label>
+            <input type="text" name="nic" placeholder="Enter NIC" required /></br>
+            <button type="submit">Add Code</button>
+        </form>
+    <?php
+    } ?>
 
     <table border="1">
         <tr>
@@ -87,9 +94,9 @@ if (!isset($_SESSION['user_id'])) {
         <?php foreach ($code as $row): ?>
             <tr>
                 <td><?= htmlspecialchars($row['id']) ?></td>
-                
+
                 <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
-                
+
                 <td>
                     <form action="./actions/main_action.php" method="post">
                         <input type="hidden" name="edit" value="<?= htmlspecialchars($row['id']) ?>" />
@@ -119,13 +126,13 @@ if (!isset($_SESSION['user_id'])) {
     
 </script> -->
 <script>
-// Detect if page is loaded from cache (Back Button)
-window.addEventListener( "pageshow", function ( event ) {
-    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-        // Reload to fetch fresh session
-        window.location.reload();
-    }
-});
+    // Detect if page is loaded from cache (Back Button)
+    window.addEventListener("pageshow", function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            // Reload to fetch fresh session
+            window.location.reload();
+        }
+    });
 </script>
 
 

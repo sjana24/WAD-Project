@@ -1,4 +1,4 @@
-<?php
+<!-- 
 require_once __DIR__ . '/../db/config.php';
 
 class AccessLog {
@@ -6,7 +6,7 @@ class AccessLog {
 
     public function __construct() {
         $db = new dbConnect();
-        $this->conn = $db->connect();
+        $this->conn = $db->getConnect();
     }
 
     public function getAllLogs() {
@@ -45,4 +45,4 @@ ORDER BY access_logs.timestamp DESC;
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$code, $status]);
     }
-}
+} -->

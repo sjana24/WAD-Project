@@ -1,4 +1,4 @@
-<?php
+<!-- 
 session_start();
 // class logout
 
@@ -22,5 +22,5 @@ session_start();
         }
 
         echo "You have been logged out successfully.";
-    
-// }
+     -->
+<!-- // } -->

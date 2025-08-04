@@ -1,9 +1,5 @@
 <?php
-// session_start();
-// if (!isset($_SESSION['admin_logged_in'])) {
-//     header("Location: ../admin_login.php");
-//     exit();
-// }
+
 
 session_start();
 
@@ -13,6 +9,10 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: ./admin_login.php");
     exit();
 }
+// else{
+//     header("Location: ./users.php");
+//     exit();
+// }
 
 // Optionally, you can check for user role or status here
 if ($_SESSION['status'] !== 'active') {

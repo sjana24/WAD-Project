@@ -8,7 +8,7 @@ header("Pragma: no-cache"); // HTTP 1.0
 header("Expires: 0"); // Proxies
 
 $log = new getter_main();
-$logs = $log->get_all_logs();
+$logs = $log->getAllLogs();
 
 // Enforce session authentication
 if (!isset($_SESSION['user_id'])) {
@@ -23,7 +23,7 @@ if (!isset($_SESSION['user_id'])) {
 
     
     <!-- <a href="admin_login.php">🔑 Admin Login</a> -->
-    <a href="./actions/admin_logout.php">🔑 Log out</a>
+    <a href="./actions/auth_action.php">🔑 Log out</a>
     <a href="users.php">🔑 Manage user</a>
 
 
