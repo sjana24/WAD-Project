@@ -1,4 +1,4 @@
- <?php
+ <!-- <?php
     if (isset($_SESSION['message'])) {
 
         $msg = htmlspecialchars($_SESSION['message'], ENT_QUOTES);
@@ -11,6 +11,7 @@
 
  <head>
      <title>Admin Login</title>
+     <link rel="stylesheet" href="assests/css/admin_login.css">
  </head>
 
  <body>
@@ -30,4 +31,49 @@
 
  </body>
 
- </html>
+ </html> -->
+
+ <?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="assests/css/admin_login.css">
+</head>
+<body>
+
+<div class="login-container">
+    <h1>🔑 Admin Panel</h1>
+    <p>Please log in to access admin features.</p>
+
+    <?php if (isset($_SESSION['message'])): ?>
+        <div class="session-message">
+            <?php echo htmlspecialchars($_SESSION['message'], ENT_QUOTES); ?>
+        </div>
+        <?php unset($_SESSION['message']); ?>
+    <?php endif; ?>
+
+    <form method="POST" action="actions/main_action.php">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" name="username" placeholder="Username" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" placeholder="Password" required maxlength="8" />
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <div class="links">
+        <a href="./index.php">🏠 Home</a>
+    </div>
+</div>
+
+</body>
+</html>
