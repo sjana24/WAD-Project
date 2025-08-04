@@ -1,5 +1,4 @@
-
-<?php
+<!-- 
 require_once "../db/config.php";
 require_once "../includes/accessHandler.php";
 
@@ -30,4 +29,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['code'])) {
         alert('No code submitted.');
         window.location.href = '../lock.php';
     </script>";
-}
+} -->

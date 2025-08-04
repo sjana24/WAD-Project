@@ -1,4 +1,4 @@
-<?php
+<!-- 
 require_once __DIR__ . '/../db/config.php';
 
 class UserData {
@@ -6,7 +6,7 @@ class UserData {
 
     public function __construct() {
         $db = new dbConnect();
-        $this->conn = $db->connect();
+        $this->conn = $db->getConnect();
     }
 
     public function getAllUserDatas() {
@@ -24,4 +24,4 @@ $sql = "SELECT id,username,status FROM user_data WHERE delete_status=0";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$code, $status]);
     }
-}
+} -->

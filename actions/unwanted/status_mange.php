@@ -1,4 +1,4 @@
-<?php
+<!-- 
 require_once '../db/config.php';
 
 
@@ -12,7 +12,7 @@ class Edit_User
     public function __construct()
     {
         $myObj = new dbConnect();
-        $this->conn = $myObj->connect();
+        $this->conn = $myObj->getConnect();
         if (!$this->conn) {
 
             return json_encode([
@@ -98,4 +98,4 @@ class Edit_User
       
 
         
-    
+     -->
