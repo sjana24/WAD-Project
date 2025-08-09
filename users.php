@@ -49,11 +49,13 @@ $code = $codeManager->codes;
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>User Codes - Admin Panel</title>
-    <link rel="stylesheet" href="assests/css/admin_panel.css">
+    <link rel="stylesheet" href="assests/css/users.css">
 </head>
+
 <body>
     <!-- Existing PHP code for alerts will stay here -->
 
@@ -83,22 +85,32 @@ $code = $codeManager->codes;
         <table>
             <thead>
                 <tr>
+                    <th>No</th>
                     <th>ID</th>
                     <th>Username</th>
                     <th colspan="2">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($code as $row): ?>
+                <?php foreach ($code as $index => $row): ?>
                     <tr>
+                        <td><?= htmlspecialchars($index + 1) ?></td>
                         <td><?= htmlspecialchars($row['id']) ?></td>
                         <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
                         <td>
+                            <?php
+                            $status = $row['status'];
+                            $class = ($status === 'active') ? 'background-color:green;' : 'background-color:red;';
+                            $value = ($status === 'active') ? 'Active' : 'Inactive';
+                            ?>
                             <form action="./actions/main_action.php" method="post">
                                 <input type="hidden" name="edit" value="<?= htmlspecialchars($row['id']) ?>" />
-                                <button type="submit" name="status">
-                                    <?= htmlspecialchars($row['status']) ?>
+                                <button type="submit" name="status" style="<?= $class ?>">
+                                    <?= htmlspecialchars($value) ?>
                                 </button>
+
+
+
                             </form>
                         </td>
                         <td>
@@ -121,4 +133,5 @@ $code = $codeManager->codes;
         });
     </script>
 </body>
+
 </html>

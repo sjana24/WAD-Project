@@ -148,3 +148,33 @@ table .delete-btn {
 table .delete-btn:hover {
     background: #c0392b;
 }
+
+.table-container {
+  max-height: 400px; /* or whatever height you want */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+/* Optional: make the table take full width */
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Sticky header */
+.table-container thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 5;
+  border-bottom: 2px solid #ccc;
+}
+
+/* Optional: some basic styling */
+.table-container table, 
+.table-container th, 
+.table-container td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}

@@ -1,0 +1,119 @@
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container for all content */
+.admin-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 1000px;
+    width: 100%;
+}
+
+/* Heading */
+.admin-container h2 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* Navigation links row */
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.nav-links a {
+    background: #667eea;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background: #5563d6;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: 14px 16px;
+    text-align: center;
+}
+
+table th {
+    background: #f5f5f5;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+table tr:nth-child(even) {
+    background: #fafafa;
+}
+
+table tr:hover {
+    background: rgba(102, 126, 234, 0.08);
+}
+
+/* Status badge */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    color: white;
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.status-active {
+    background-color: #27ae60;
+}
+
+.status-inactive {
+    background-color: #e74c3c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 20px;
+    }
+
+    table th, table td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+    }
+}

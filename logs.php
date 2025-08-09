@@ -1,6 +1,5 @@
 <?php
 require_once "includes/auth.php";
-// require_once "actions/get_all_logs.php";
 require_once "actions/getter_main.php";
 
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
@@ -12,41 +11,71 @@ $logs = $log->getAllLogs();
 
 // Enforce session authentication
 if (!isset($_SESSION['user_id'])) {
-    // User is not logged in → Redirect to login
     header("Location: admin_login.php");
     exit;
 }
-
 ?>
+<!DOCTYPE html>
+<html lang="en">
 
-<h2>Access Logs</h2>
+<head>
+    <meta charset="UTF-8">
+    <title>Access Logs - Admin Panel</title>
+    <link rel="stylesheet" href="assests/css/admin_panel.css">
+</head>
 
-    
-    <!-- <a href="admin_login.php">🔑 Admin Login</a> -->
-    <a href="./actions/auth_action.php">🔑 Log out</a>
-    <a href="users.php">🔑 Manage user</a>
+<body>
+    <div class="admin-container">
+        <h1>📋 Access Logs</h1>
 
+        <div class="nav-links">
+            <a href="users.php">👥 Manage Users</a>
+            <!-- <form action="./actions/auth_action.php" method="post" class="logout-form">
+                <input type="hidden" name="logout" value="1" />
+                <button type="submit" name="status">🔓 Logout</button>
+            </form> -->
+             <form action="./actions/main_action.php" method="post" class="logout-form">
+                <input type="hidden" name="logout" value="1" />
+                <button type="submit" name="status">🔓 Logout</button>
+            </form>
+        </div>
 
-<table border="1">
-    <tr><th>ID</th><th>username</th><th>Code Used</th><th>Status</th><th>Time</th></tr>
-    <?php foreach ($logs as $row): ?>
-        <tr>
-            <td><?= htmlspecialchars($row['id']) ?></td>
-            <td><?= htmlspecialchars($row['username']) ?></td>
-            <td><?= htmlspecialchars($row['used_code'] ?? '****') ?></td>
-            <td><?= htmlspecialchars($row['status']) ?></td>
-            <!-- <td><?= htmlspecialchars($row['status']) ?></td> -->
-            <td><?= htmlspecialchars($row['timestamp']) ?></td>
-            
-        </tr>
-    <?php endforeach; ?>
-</table>
-<script>
-// Detect if page is loaded from cache (Back Button)
-window.addEventListener( "pageshow", function ( event ) {
-    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-        // Reload to fetch fresh session
-        window.location.reload();
-    }
-});
-</script>
+        <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Code Used</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($logs as $index=> $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($index+1) ?></td>
+                        <td><?= htmlspecialchars($row['id']) ?></td>
+                        <td><?= htmlspecialchars($row['username']) ?></td>
+                        <td><?= htmlspecialchars($row['used_code'] ?? '****') ?></td>
+                        <td><?= htmlspecialchars($row['status']) ?></td>
+                        <td><?= htmlspecialchars($row['timestamp']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <script>
+        // Detect if page is loaded from cache (Back Button)
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+
+</html>

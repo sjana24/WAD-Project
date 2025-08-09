@@ -23,7 +23,8 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
 <!DOCTYPE html>
 
 <head>
-    
+    <title>Home Security System</title>
+    <link rel="stylesheet" href="assests/css/admin_login.css">
 </head>
 
 <body>
@@ -35,7 +36,7 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
         </p>
     <?php endif; ?>
 
-    <form method="POST" action="actions/login_action.php">
+    <form method="POST" action="actions/main_action.php">
         <label>Username:</label><br>
         <input type="text" name="username" required autofocus><br><br>
 
