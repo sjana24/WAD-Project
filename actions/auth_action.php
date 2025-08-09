@@ -98,13 +98,14 @@ class Auth_Action extends User
             $_SESSION['message'] ='logout successfully';
             // echo "<script>alert('Logout successfully');</script>";
             // location.reload();
-            // header("Location: ../admin_login.php");
-            // exit;
+            header("Location: ../admin_login.php");
+            exit;
              return json_encode([
                 "success" => true,
                 "message" => "logout successfully"
             ]);
         } 
+
         return json_encode([
                 "success" => false,
                 "message" => "Logout failed"
@@ -159,8 +160,8 @@ class Auth_Action extends User
                     // Insert was successful
                     return json_encode([
                         "success" => false,
-                        "error" => "User not found.<br>",
-                        "message" => "Access Denied: Invalid or inactive access code.<br>"
+                        "error" => "User not found.",
+                        "message" => "Access Denied: Invalid or inactive access code."
                     ]);
                 } else {
                     // Insert failed (unlikely but possible)
@@ -174,8 +175,8 @@ class Auth_Action extends User
         } catch (Exception $e) {
             return json_encode([
                 "success" => false,
-                "error" => error_log("Login error: " . $e->getMessage()) . ".<br>",
-                "message" => "An unexpected error occurred. Please try again later.<br>"
+                "error" => error_log("Login error: " . $e->getMessage()) . ".",
+                "message" => "An unexpected error occurred. Please try again later."
             ]);
         }
     }

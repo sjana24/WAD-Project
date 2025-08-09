@@ -97,9 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //  2.admin logout handle
     if (!empty($logout) && $logout== '1') {
+        echo "dfknofdnofdngod";
         $myObj = new Auth_Action();
         $response = $myObj->admin_logout();
-        // $data = json_decode($response, true);
+        $data = json_decode($response, true);
 
         if ($data['success']) {
             // echo $data['success'];
@@ -199,12 +200,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // echo $data['success'];
             echo $data['message'];
             $_SESSION['message'] = $data['message'];
+            header("Location: ../lock.php");
+                exit;
             // echo $data['code'];
         } else {
             echo $data['success'];
             echo  $data['message'];
             $_SESSION['message'] = $data['message'];
+            // $_SESSION['message'] = "knsdvjdsnjn";
             echo  $data['error'];
+            header("Location: ../lock.php");
+                exit;
         }
     }
 }
