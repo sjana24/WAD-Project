@@ -48,94 +48,90 @@ $code = $codeManager->codes;
 
 ?>
 <!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>User Codes</title>
+    <meta charset="UTF-8">
+    <title>User Codes - Admin Panel</title>
+    <link rel="stylesheet" href="assests/css/users.css">
 </head>
 
 <body>
-    <?php
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: admin_login.php");
-        exit();
-    }
-    ?>
+    <!-- Existing PHP code for alerts will stay here -->
 
-    <!-- HTML Output -->
-    <h2>User Datas</h2>
-    <a href="logs.php">View Access Logs</a>
-    <!-- <a onclick="" valu href="./actions/admin_logout.php">🔑 Log out</a> -->
-    <form action="./actions/main_action.php" method="post">
-        <input type="hidden" name="logout" value="1" />
-        <input type="submit" name="status" value="Logout" />
-    </form>
-    <?php
-    if (1) {
-    ?>
-        <form method="POST" action="./actions/main_action.php">
-            <label id="name">Name:</label>
-            <input type="text" name="name" placeholder="Enter new name" required /><br>
-            <label id="mobile_number">Mobile Number:</label>
-            <input type="text" name="mobile_number" placeholder="Enter mobile number" required /><br>
-            <label id="nic">NIC:</label>
-            <input type="text" name="nic" placeholder="Enter NIC" required /></br>
-            <button type="submit">Add Code</button>
+    <div class="admin-container">
+        <h1>👤 User Management</h1>
+
+        <div class="nav-links">
+            <a href="logs.php">📋 View Access Logs</a>
+            <form action="./actions/main_action.php" method="post" class="logout-form">
+                <input type="hidden" name="logout" value="1" />
+                <button type="submit" name="status">🔓 Logout</button>
+            </form>
+        </div>
+
+        <form method="POST" action="./actions/main_action.php" class="add-user-form">
+            <h2>Add New User</h2>
+            <label>Name:</label>
+            <input type="text" name="name" placeholder="Enter name" required />
+            <label>Mobile Number:</label>
+            <input type="text" name="mobile_number" placeholder="Enter mobile number" required />
+            <label>NIC:</label>
+            <input type="text" name="nic" placeholder="Enter NIC" required />
+            <button type="submit">➕ Add Code</button>
         </form>
-    <?php
-    } ?>
 
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <!-- <th>Code</th> -->
-            <th>Username</th>
-            <th colspan="2">Action</th>
-        </tr>
-        <?php foreach ($code as $row): ?>
-            <tr>
-                <td><?= htmlspecialchars($row['id']) ?></td>
+        <h2>User List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($code as $index => $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($index + 1) ?></td>
+                        <td><?= htmlspecialchars($row['id']) ?></td>
+                        <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
+                        <td>
+                            <?php
+                            $status = $row['status'];
+                            $class = ($status === 'active') ? 'background-color:green;' : 'background-color:red;';
+                            $value = ($status === 'active') ? 'Active' : 'Inactive';
+                            ?>
+                            <form action="./actions/main_action.php" method="post">
+                                <input type="hidden" name="edit" value="<?= htmlspecialchars($row['id']) ?>" />
+                                <button type="submit" name="status" style="<?= $class ?>">
+                                    <?= htmlspecialchars($value) ?>
+                                </button>
 
-                <td><?= htmlspecialchars($row['username'] ?? '-') ?></td>
 
-                <td>
-                    <form action="./actions/main_action.php" method="post">
-                        <input type="hidden" name="edit" value="<?= htmlspecialchars($row['id']) ?>" />
-                        <input type="submit" name="status" value="<?= htmlspecialchars($row['status']) ?>" />
-                    </form>
-                </td>
-                <td>
-                    <form action="./actions/main_action.php" method="post">
-                        <input type="hidden" name="delete" value="<?= htmlspecialchars($row['id']) ?>" />
-                        <input type="submit" name="status" value="Delete" />
-                    </form>
-                </td>
 
-            </tr>
-        <?php endforeach; ?>
-    </table>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="./actions/main_action.php" method="post">
+                                <input type="hidden" name="delete" value="<?= htmlspecialchars($row['id']) ?>" />
+                                <button type="submit" name="status" class="delete-btn">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
+    <script>
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
-<!-- <script>
-    sesssion_start();
-    if (isset($_SESSION['user_id'])) {
-            // echo "Logged in as: " . htmlspecialchars($_SESSION['user_id']);
-            setTimeout(function() {
-        location.reload();
-    }, 3000); // Reload after 3 seconds
-        }
-    
-</script> -->
-<script>
-    // Detect if page is loaded from cache (Back Button)
-    window.addEventListener("pageshow", function(event) {
-        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-            // Reload to fetch fresh session
-            window.location.reload();
-        }
-    });
-</script>
-
-
-
 
 </html>
