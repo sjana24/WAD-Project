@@ -1,15 +1,45 @@
 <?php
 include "includes/auth.php";
 require_once "actions/getter_main.php";
+require_once "db/config.php"; // <-- make sure this has $host, $user, $pass, $dbname
+
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
 header("Pragma: no-cache"); // HTTP 1.0
 header("Expires: 0"); // Proxies
 
+// -------------------- Handle Reset Request --------------------
+if (isset($_POST['reset_actions'])) {
+    $enteredPassword = $_POST['admin_password'];
 
-// Class to manage user codes
+    $correctHash = '$2y$10$RqqCNLNAd6bW4S/pmCZPSeOp2U4jqfEpAHAc2HWKhk4SyBe5VrMrO';
+
+    if (password_verify($enteredPassword, $correctHash)) {
+        $db = new dbConnect();
+        $conn = $db->getConnect();
+
+        if ($conn === null) {
+            die("Database connection failed.");
+        }
+
+        // PDO truncate query
+        $stmt = $conn->prepare("TRUNCATE TABLE user_data");
+        $stmt->execute();
+
+        $stmt = $conn->prepare("TRUNCATE TABLE admins");
+        $stmt->execute();
+
+        $_SESSION['message'] = "✅ User action list cleared.";
+    } else {
+        $_SESSION['message'] = "❌ Incorrect password. Reset aborted.";
+    }
+
+    header("Location: registration.php");
+    exit;
+}
+
+// -------------------- Class to Manage Codes --------------------
 class UserCodeManager
 {
-    // private $conn;
     public $codes;
 
     public function __construct()
@@ -17,35 +47,23 @@ class UserCodeManager
         $myObj = new getter_main();
 
         if (isset($_SESSION['message'])) {
-
             $msg = htmlspecialchars($_SESSION['message'], ENT_QUOTES);
             echo "<script>alert('{$msg}');</script>";
-            unset($_SESSION['message']);  // clear the message after showing
-
+            unset($_SESSION['message']);
         }
-        if (isset($_SESSION['code'])) {
 
+        if (isset($_SESSION['code'])) {
             $msg = htmlspecialchars($_SESSION['code'], ENT_QUOTES);
             echo "<script>alert('Your code is-{$msg}');</script>";
-            unset($_SESSION['code']);  // clear the message after showing
-
+            unset($_SESSION['code']);
         }
 
-        // if (isset($_SESSION['auth_times'])) {
-        //     echo "<br>Login Time: " . $_SESSION['auth_times'];
-        // }
-
-        // if (isset($_SESSION['status'])) {
-        //     echo "<br>Status: " . $_SESSION['status'];
-        // }
         $this->codes = $myObj->getAllUserDatas();
-        // print_r($this->codes); // Debugging line
     }
 }
 
 $codeManager = new UserCodeManager();
 $code = $codeManager->codes;
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,16 +75,22 @@ $code = $codeManager->codes;
 </head>
 
 <body>
-    <!-- Existing PHP code for alerts will stay here -->
-
     <div class="admin-container">
         <h1>👤 User Management</h1>
 
         <div class="nav-links">
             <a href="logs.php">📋 View Access Logs</a>
-            <form action="./actions/main_action.php" method="post" class="logout-form">
+
+            <!-- Logout -->
+            <form action="./actions/main_action.php" method="post" class="logout-form" style="display:inline;">
                 <input type="hidden" name="logout" value="1" />
                 <button type="submit" name="status">🔓 Logout</button>
+            </form>
+
+            <!-- Reset User Action List -->
+            <form action="" method="post" style="display:inline; margin-left:10px;">
+                <input type="password" name="admin_password" placeholder="Enter password" required />
+                <button type="submit" name="reset_actions" style="background-color:orange;">🔄 Reset</button>
             </form>
         </div>
 
@@ -108,9 +132,6 @@ $code = $codeManager->codes;
                                 <button type="submit" name="status" style="<?= $class ?>">
                                     <?= htmlspecialchars($value) ?>
                                 </button>
-
-
-
                             </form>
                         </td>
                         <td>
@@ -133,5 +154,4 @@ $code = $codeManager->codes;
         });
     </script>
 </body>
-
 </html>
