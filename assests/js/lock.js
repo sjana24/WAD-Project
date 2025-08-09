@@ -1,5 +1,5 @@
 let accessCode = '';
-const maxLength = 4;
+const maxLength = 16;
 
 function addDigit(digit) {
   if (accessCode.length < maxLength) {

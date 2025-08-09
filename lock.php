@@ -28,7 +28,7 @@ if (isset($_SESSION['message'])) {
     <h1>🔒 Enter Access Code</h1>
     <form method="POST" action="actions/main_action.php" class="keypad-mode">
       <div class="form-group">
-        <input type="password" name="access_code" id="accessCode" placeholder="••••" maxlength="4" required readonly />
+        <input type="password" name="access_code" id="accessCode" placeholder="Enter your code" maxlength="40" required readonly />
       </div>
       
       <!-- Keypad -->
