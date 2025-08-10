@@ -78,6 +78,7 @@ $code = $codeManager->codes;
     <meta charset="UTF-8">
     <title>User Codes - Admin Panel</title>
     <link rel="stylesheet" href="assests/css/users.css">
+    <link rel="icon" type="image/png" href="./assests/images/logo.svg" />
 </head>
 
 <body>

@@ -30,6 +30,7 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
 <head>
 
     <title>Home Security System</title>
+    <link rel="icon" type="image/png" href="./assests/images/logo.svg" />
     <link rel="stylesheet" href="assests/css/adminlog.css">
 </head>
 
