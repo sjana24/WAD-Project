@@ -1,15 +1,14 @@
-
 <?php
 session_start();
 
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    header("Location: admin_dashboard.php");
+    header("Location: users.php");
     exit;
 }
 
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: admin_login.php");
+    header("Location: index.php");
     exit;
 }
 
@@ -23,12 +22,13 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
 <!DOCTYPE html>
 
 <head>
+
     <title>Home Security System</title>
-    <link rel="stylesheet" href="assests/css/admin_login.css">
+    <link rel="stylesheet" href="assests/css/adminlog.css">
 </head>
 
 <body>
-    <h2>Admin Login</h2>
+    
 
     <?php if ($message): ?>
         <p style="color: <?= $messageType === 'error' ? 'red' : 'green'; ?>">
@@ -36,16 +36,21 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
         </p>
     <?php endif; ?>
 
+
     <form method="POST" action="actions/main_action.php">
+
         <label>Username:</label><br>
         <input type="text" name="username" required autofocus><br><br>
 
         <label>Password:</label><br>
         <input type="password" name="password" required><br><br>
 
-        <button type="submit">Login</button>
+        <button type="submit">Login</button></br></br>
+
+        <a href="registration.php" class="register-btn">Register</a>
+
     </form>
     </body>
-    </html>
+    </html> 
 
 
