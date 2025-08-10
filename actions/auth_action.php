@@ -19,8 +19,8 @@ class Auth_Action extends User
 
             return json_encode([
                 "success" => false,
-                "error" => "db not connect<br>.",
-                "message" => "Database connection failed. Please try again later.<br>"
+                "error" => "db not connect.",
+                "message" => "Database connection failed. Please try again later."
             ]);
         }
     }
@@ -68,7 +68,7 @@ class Auth_Action extends User
                     return json_encode([
                         "success" => false,
                         "error" => "Invalid username or password.<br>",
-                        "message" => "Invalid credintials.<br>"
+                        "message" => "Invalid credintials."
                     ]);
                 }
             }
@@ -78,7 +78,7 @@ class Auth_Action extends User
             return json_encode([
                 "success" => false,
                 "error" => error_log("Login error: " . $e->getMessage()),
-                "message" => "Invalid credintials.<br>"
+                "message" => "Invalid credintials."
             ]);
 
             
@@ -180,6 +180,83 @@ class Auth_Action extends User
             ]);
         }
     }
+
+    public function reset_password($userAnswer)
+{
+    // Prepare and execute the query to fetch question & answer from DB
+    $sql = "SELECT question, answer FROM question LIMIT 1";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetch();
+
+    if ($result) {
+        $dbAnswer = $result['answer'];
+
+        // Compare stored answer with user input (case-insensitive, trimmed)
+        if (strcasecmp(trim($userAnswer), trim($dbAnswer)) === 0) {
+            // Correct answer — proceed to logout
+            if (session_status() === PHP_SESSION_ACTIVE) {
+                $_SESSION = [];
+                session_unset();
+                session_destroy();
+
+                return json_encode([
+                    "success" => true,
+                    "message" => "Logout successfully"
+                ]);
+            } else {
+                return json_encode([
+                    "success" => false,
+                    "message" => "No active session to log out"
+                ]);
+            }
+        } else {
+            // Wrong answer
+            return json_encode([
+                "success" => false,
+                "message" => "Security answer is incorrect"
+            ]);
+        }
+    } else {
+        return json_encode([
+            "success" => false,
+            "message" => "No security question found in database"
+        ]);
+    }
+}
+
+public function change_admin_password($adminId, $newPassword)
+{
+    try {
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        $sql = "UPDATE admins 
+                SET password_hash = ?, updated_at = NOW() 
+                WHERE id = ?";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$hashedPassword, 1]);
+
+        if ($stmt->rowCount() > 0) {
+            return json_encode([
+                "success" => true,
+                "message" => "Password updated successfully."
+            ]);
+        } else {
+            return json_encode([
+                "success" => false,
+                "message" => "No changes made or admin not found."
+            ]);
+        }
+    } catch (PDOException $e) {
+        return json_encode([
+            "success" => false,
+            "message" => "Database error: " . $e->getMessage()
+        ]);
+    }
+}
+
+
    
 }
 
