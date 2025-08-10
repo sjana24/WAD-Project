@@ -136,7 +136,8 @@ $code = $codeManager->codes;
                             ?>
                             <form action="./actions/main_action.php" method="post">
                                 <input type="hidden" name="edit" value="<?= htmlspecialchars($row['id']) ?>" />
-                                <button type="submit" name="status" style="<?= $class ?>">
+                                <input type="hidden" name="status" value="<?= htmlspecialchars($row['status']) ?>" />
+                                <button type="submit" name="submit-edit" style="<?= $class ?>">
                                     <?= htmlspecialchars($value) ?>
                                 </button>
                             </form>
@@ -144,7 +145,7 @@ $code = $codeManager->codes;
                         <td>
                             <form action="./actions/main_action.php" method="post">
                                 <input type="hidden" name="delete" value="<?= htmlspecialchars($row['id']) ?>" />
-                                <button type="submit" name="status" class="delete-btn">Delete</button>
+                                <button type="submit" name="submit-del" class="delete-btn">Delete</button>
                             </form>
                         </td>
                     </tr>
