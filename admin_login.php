@@ -6,6 +6,12 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
     exit;
 }
 
+ if (isset($_SESSION['message'])) {
+            $msg = htmlspecialchars($_SESSION['message'], ENT_QUOTES);
+            echo "<script>alert('{$msg}');</script>";
+            unset($_SESSION['message']);
+        }
+
 if (isset($_GET['logout'])) {
     session_destroy();
     header("Location: index.php");
@@ -48,8 +54,33 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
         <button type="submit">Login</button></br></br>
 
         <a href="registration.php" class="register-btn">Register</a>
+        <a  onclick="askPassword()" class="register-btn">Reset</a>
 
     </form>
+
+    <!-- Hidden form to send answer -->
+<form id="resetForm" action="actions/reset.php" method="post" style="display:none;">
+    <input type="hidden" name="logout" value="1" />
+    <input type="hidden" name="answer" id="answer" />
+</form>
+
+    <script>
+function askPassword() {
+    let answer = prompt("Please answer your security question:");
+
+    if (!answer) {
+        alert("Cancelled or empty input.");
+        return;
+    }
+
+    // Fill hidden form input
+    document.getElementById("answer").value = answer;
+
+    // Submit form to reset.php
+    document.getElementById("resetForm").submit();
+}
+</script>
+
     </body>
     </html> 
 
