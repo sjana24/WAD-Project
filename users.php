@@ -28,6 +28,12 @@ if (isset($_POST['reset_actions'])) {
         $stmt = $conn->prepare("TRUNCATE TABLE admins");
         $stmt->execute();
 
+        $stmt = $conn->prepare("TRUNCATE TABLE access_logs");
+        $stmt->execute();
+
+        $stmt = $conn->prepare("TRUNCATE TABLE question");
+        $stmt->execute();
+
         $_SESSION['message'] = "✅ User action list cleared.";
     } else {
         $_SESSION['message'] = "❌ Incorrect password. Reset aborted.";

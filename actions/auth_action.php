@@ -235,7 +235,7 @@ public function change_admin_password($adminId, $newPassword)
                 WHERE id = ?";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$hashedPassword, 2]);
+        $stmt->execute([$hashedPassword, 1]);
 
         if ($stmt->rowCount() > 0) {
             return json_encode([
