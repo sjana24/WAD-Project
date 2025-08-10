@@ -53,7 +53,7 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
 
         <button type="submit">Login</button></br></br>
 
-        <a href="registration.php" class="register-btn">Register</a>
+        <a href="index.php" class="register-btn">Back</a>
         <a  onclick="askPassword()" class="register-btn">Reset</a>
 
     </form>

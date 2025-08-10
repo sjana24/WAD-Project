@@ -19,8 +19,8 @@ class Auth_Action extends User
 
             return json_encode([
                 "success" => false,
-                "error" => "db not connect<br>.",
-                "message" => "Database connection failed. Please try again later.<br>"
+                "error" => "db not connect.",
+                "message" => "Database connection failed. Please try again later."
             ]);
         }
     }
@@ -68,7 +68,7 @@ class Auth_Action extends User
                     return json_encode([
                         "success" => false,
                         "error" => "Invalid username or password.<br>",
-                        "message" => "Invalid credintials.<br>"
+                        "message" => "Invalid credintials."
                     ]);
                 }
             }
@@ -78,7 +78,7 @@ class Auth_Action extends User
             return json_encode([
                 "success" => false,
                 "error" => error_log("Login error: " . $e->getMessage()),
-                "message" => "Invalid credintials.<br>"
+                "message" => "Invalid credintials."
             ]);
 
             

@@ -14,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($updateData['success']) {
             $_SESSION['message'] = $updateData['message'];
-            echo "<script>alert('Password updated successfully!'); window.location.href='../admin_login.php';</script>";
+            echo "<script> window.location.href='../admin_login.php';</script>";
         } else {
             $_SESSION['message'] = $updateData['message'] ?? 'Password update failed.';
-            echo "<script>alert('Password update failed!'); window.location.href='../admin_login.php';</script>";
+            echo "<script> window.location.href='../admin_login.php';</script>";
         }
         exit;
     }
