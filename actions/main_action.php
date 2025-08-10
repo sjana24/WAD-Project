@@ -26,50 +26,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo ";ogout vansd".$logout;
     // Sanitize and Validate Inputs
 
-    // $submittedCode = isset($_POST['access_code']) ? filter_var(trim($_POST['access_code']), FILTER_SANITIZE_STRING) : '';
-    // if (!preg_match('/^\d{4}$/', $submittedCode)) {
-    //     $submittedCode = ''; // Invalid code format (expecting 4-digit code)
-    // }
+    $submittedCode = isset($_POST['access_code']) ? filter_var(trim($_POST['access_code']), FILTER_SANITIZE_STRING) : '';
+    if (!preg_match('/^\d{4}$/', $submittedCode)) {
+        $submittedCode = ''; // Invalid code format (expecting 4-digit code)
+    }
 
-    // $submittedUsername = isset($_POST['username']) ? filter_var(trim($_POST['username']), FILTER_SANITIZE_STRING) : '';
-    // if (!preg_match('/^[a-zA-Z0-9_]{3,50}$/', $submittedUsername)) {
-    //     $submittedUsername = ''; // Invalid username
-    // }
+    // Admin login validation
+    $submittedUsername = isset($_POST['username']) ? filter_var(trim($_POST['username']), FILTER_SANITIZE_STRING) : '';
+    $submittedPassword = isset($_POST['password']) ? trim($_POST['password']) : '';
+    
+    // Validate username format (3-50 characters, alphanumeric and underscore only)
+    if (!empty($submittedUsername) && !preg_match('/^[a-zA-Z0-9_]{3,50}$/', $submittedUsername)) {
+        $submittedUsername = ''; // Invalid username format
+    }
+    
+    // Validate password length (minimum 6 characters)
+    if (!empty($submittedPassword) && strlen($submittedPassword) < 6) {
+        $submittedPassword = ''; // Invalid password length
+    }
 
-    // $submittedPassword = isset($_POST['password']) ? filter_var(trim($_POST['password']), FILTER_SANITIZE_STRING) : '';
-    // if (strlen($submittedPassword) < 6) {
-    //     $submittedPassword = ''; // Weak password
-    // }
+    // Add user validation
+    $submittedName = isset($_POST['name']) ? filter_var(trim($_POST['name']), FILTER_SANITIZE_STRING) : '';
+    if (!empty($submittedName) && !preg_match('/^[a-zA-Z ]{2,100}$/', $submittedName)) {
+        $submittedName = ''; // Invalid name
+    }
 
-    // $submittedName = isset($_POST['name']) ? filter_var(trim($_POST['name']), FILTER_SANITIZE_STRING) : '';
-    // if (!preg_match('/^[a-zA-Z ]{2,100}$/', $submittedName)) {
-    //     $submittedName = ''; // Invalid name
-    // }
+    $submittedMobileNumber = isset($_POST['mobile_number']) ? filter_var(trim($_POST['mobile_number']), FILTER_SANITIZE_STRING) : '';
+    if (!empty($submittedMobileNumber) && !preg_match('/^\d{10,15}$/', $submittedMobileNumber)) {
+        $submittedMobileNumber = ''; // Invalid mobile number
+    }
 
-    // $submittedMobileNumber = isset($_POST['mobile_number']) ? filter_var(trim($_POST['mobile_number']), FILTER_SANITIZE_STRING) : '';
-    // if (!preg_match('/^\d{10,15}$/', $submittedMobileNumber)) {
-    //     $submittedMobileNumber = ''; // Invalid mobile number
-    // }
+    $submittedNIC = isset($_POST['nic']) ? filter_var(trim($_POST['nic']), FILTER_SANITIZE_STRING) : '';
+    if (!empty($submittedNIC) && !preg_match('/^[0-9]{9}[vVxX]?$|^[0-9]{12}$/', $submittedNIC)) {
+        $submittedNIC = ''; // Invalid NIC (Old or New format)
+    }
 
-    // $submittedNIC = isset($_POST['nic']) ? filter_var(trim($_POST['nic']), FILTER_SANITIZE_STRING) : '';
-    // if (!preg_match('/^[0-9]{9}[vVxX]?$|^[0-9]{12}$/', $submittedNIC)) {
-    //     $submittedNIC = ''; // Invalid NIC (Old or New format)
-    // }
+    // User management validation
+    $delete_id = isset($_POST['delete']) ? filter_var(trim($_POST['delete']), FILTER_SANITIZE_NUMBER_INT) : '';
+    if (!empty($delete_id) && !is_numeric($delete_id)) {
+        $delete_id = ''; // Invalid delete id
+    }
 
-    // $delete_id = isset($_POST['delete']) ? filter_var(trim($_POST['delete']), FILTER_SANITIZE_NUMBER_INT) : '';
-    // if (!is_numeric($delete_id)) {
-    //     $delete_id = ''; // Invalid delete id
-    // }
-
-    // $edit_id = isset($_POST['edit']) ? filter_var(trim($_POST['edit']), FILTER_SANITIZE_NUMBER_INT) : '';
-    // if (!is_numeric($edit_id)) {
-    //     $edit_id = ''; // Invalid edit id
-    // }
-
-    // $status = isset($_POST['status']) ? filter_var(trim($_POST['status']), FILTER_SANITIZE_STRING) : '';
-    // if (!in_array($status, ['active', 'inactive', 'deleted'])) {
-    //     $status = ''; // Invalid status value
-    // }
+    $edit_id = isset($_POST['edit']) ? filter_var(trim($_POST['edit']), FILTER_SANITIZE_NUMBER_INT) : '';
+    if (!empty($edit_id) && !is_numeric($edit_id)) {
+        $edit_id = ''; // Invalid edit id
+    }
 
 
     //  1.admin login handle
@@ -79,20 +80,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = json_decode($response, true);
 
         if ($data['success']) {
-            // echo $data['success'];
-            // echo $data['message'];
-            // echo "<script>alert({$_data['message']});</script>";
             $_SESSION['message'] = $data['message'];
+            $_SESSION['message_type'] = 'success';
             header("Location: ../users.php");
             exit;
         } else {
-            // echo $data['success'];
-            // echo  $data['message'];
-            $_SESSION['message'] = $data['message'];
-            // echo  $data['error'];
+            // Simple error message - don't specify which credential is wrong
+            $_SESSION['message'] = "Invalid username or password";
+            $_SESSION['message_type'] = 'error';
             header("Location: ../admin_login.php");
             exit;
         }
+    } elseif ((!empty($_POST['username']) || !empty($_POST['password'])) && 
+              (empty($submittedUsername) || empty($submittedPassword))) {
+        // If username/password fields were submitted but validation failed
+        $_SESSION['message'] = "Invalid username or password";
+        $_SESSION['message_type'] = 'error';
+        header("Location: ../admin_login.php");
+        exit;
     }
 
     //  2.admin logout handle
@@ -127,66 +132,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = json_decode($response, true);
 
         if ($data['success']) {
-            echo $data['success'];
-            echo $data['message'];
             $_SESSION['message'] = $data['message'];
-            echo $data['code'];
             $_SESSION['code'] = $data['code'];
             header("Location: ../users.php");
             exit;
         } else {
-            echo $data['success'];
-            echo  $data['message'];
             $_SESSION['message'] = $data['message'];
             header("Location: ../users.php");
             exit;
         }
+    } elseif ((!empty($_POST['name']) || !empty($_POST['mobile_number']) || !empty($_POST['nic'])) && 
+              (empty($submittedName) || empty($submittedMobileNumber) || empty($submittedNIC))) {
+        // If user fields were submitted but validation failed
+        $_SESSION['message'] = "Invalid input. Please check your name, mobile number, and NIC format.";
+        header("Location: ../users.php");
+        exit;
     }
 
 
     // 3. manage user
-    if (!empty($delete_id) || !empty($edit_id))
+    if (!empty($delete_id) || !empty($edit_id)) {
         if (!empty($delete_id)) {
             $response = $myObj->deleteUser($delete_id);
             $data = json_decode($response, true);
 
             if ($data['success']) {
-                // echo $data['success'];
                 $_SESSION['message'] = $data['message'];
-                // echo $data['message'];
-                // echo $data['code'];
                 header("Location: ../users.php");
                 exit;
             } else {
-                echo $data['success'];
-                echo  $data['message'];
                 $_SESSION['message'] = $data['message'];
-                echo  $data['error'];
                 header("Location: ../users.php");
                 exit;
             }
         } else {
             $updatedStatus = $status === "active" ? "inactive" : "active";
-            echo "<br>edit id is" . $edit_id . "-" . $updatedStatus;
             $response = $myObj->user_status_manage($edit_id, $updatedStatus);
             $data = json_decode($response, true);
 
             if ($data['success']) {
-                // echo $data['success'];
-                echo $data['message'];
                 $_SESSION['message'] = $data['message'];
-                // echo $data['code'];
                 header("Location: ../users.php");
                 exit;
             } else {
-                echo $data['success'];
-                echo  $data['message'];
                 $_SESSION['message'] = $data['message'];
-                echo  $data['error'];
                 header("Location: ../users.php");
                 exit;
             }
         }
+    }
 
 
 
