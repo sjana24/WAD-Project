@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "../db/config.php";
 class Registration
 {
@@ -94,22 +95,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return htmlspecialchars(strip_tags(trim($data)));
     }
 
+    // Validation helper functions
+    function validateUsername($username) {
+        // Username: 3-30 characters, alphanumeric and underscore only
+        if (strlen($username) < 3 || strlen($username) > 30) {
+            return "Username must be between 3 and 30 characters.";
+        }
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+            return "Username can only contain letters, numbers, and underscores.";
+        }
+        return true;
+    }
+
+    function validatePassword($password) {
+        // Password: minimum 8 characters, at least one letter and one number
+        if (strlen($password) < 8) {
+            return "Password must be at least 8 characters long.";
+        }
+        if (!preg_match('/^(?=.*[A-Za-z])(?=.*\d)/', $password)) {
+            return "Password must contain at least one letter and one number.";
+        }
+        return true;
+    }
+
+    function validateSecurityQuestion($question) {
+        // Validate against allowed security questions
+        $allowedQuestions = ['q1', 'q2', 'q3', 'q4', 'q5'];
+        if (!in_array($question, $allowedQuestions)) {
+            return "Invalid security question selected.";
+        }
+        return true;
+    }
+
+    function validateAnswer($answer) {
+        // Answer: 1-100 characters, basic validation
+        if (strlen($answer) < 1 || strlen($answer) > 100) {
+            return "Answer must be between 1 and 100 characters.";
+        }
+        // Remove potentially dangerous characters
+        if (preg_match('/[<>"\']/', $answer)) {
+            return "Answer contains invalid characters.";
+        }
+        return true;
+    }
+
     // Collect and sanitize inputs
-    $username = isset($_POST['username']) ? sanitize($_POST['username']) : '';
+    $username = isset($_POST['username']) ? filter_var(trim($_POST['username']), FILTER_SANITIZE_STRING) : '';
     $password = $_POST['password'] ?? '';
     $password_confirm = $_POST['password_confirm'] ?? '';
-    $question = isset($_POST['question']) ? sanitize($_POST['question']) : '';
-    $answer = isset($_POST['answer']) ? sanitize($_POST['answer']) : '';
+    $question = isset($_POST['question']) ? filter_var(trim($_POST['question']), FILTER_SANITIZE_STRING) : '';
+    $answer = isset($_POST['answer']) ? filter_var(trim($_POST['answer']), FILTER_SANITIZE_STRING) : '';
 
     // Validate required fields
     if (!$username || !$password || !$password_confirm || !$question || !$answer) {
-        echo "Error: All fields are required.";
+        $_SESSION['error_message'] = "All fields are required.";
+        header("Location: ../registration.php");
+        exit;
+    }
+
+    // Validate username format
+    $usernameValidation = validateUsername($username);
+    if ($usernameValidation !== true) {
+        $_SESSION['error_message'] = $usernameValidation;
+        header("Location: ../registration.php");
+        exit;
+    }
+
+    // Validate password strength
+    $passwordValidation = validatePassword($password);
+    if ($passwordValidation !== true) {
+        $_SESSION['error_message'] = $passwordValidation;
+        header("Location: ../registration.php");
         exit;
     }
 
     // Validate password match
     if ($password !== $password_confirm) {
-        echo "Error: Passwords do not match.";
+        $_SESSION['error_message'] = "Passwords do not match.";
+        header("Location: ../registration.php");
+        exit;
+    }
+
+    // Validate security question
+    $questionValidation = validateSecurityQuestion($question);
+    if ($questionValidation !== true) {
+        $_SESSION['error_message'] = $questionValidation;
+        header("Location: ../registration.php");
+        exit;
+    }
+
+    // Validate answer
+    $answerValidation = validateAnswer($answer);
+    if ($answerValidation !== true) {
+        $_SESSION['error_message'] = $answerValidation;
+        header("Location: ../registration.php");
         exit;
     }
     $myObj = new Registration();
@@ -117,47 +196,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode($response, true);
 
     if ($data['success']) {
-        echo $data['success'];
-        echo $data['message'];
-
         $response = $myObj->insertQuestion($question, $answer);
-        $data = json_decode($response, true);
-        if ($data['success']) {
-            echo $data['success'];
-            echo $data['message'];
-            echo "<script>alert({$_data['message']});</script>";
-            // $_SESSION['message'] = $data['message'];
+        $questionData = json_decode($response, true);
+        
+        if ($questionData['success']) {
+            $_SESSION['success_message'] = "Registration completed successfully. Please login with your credentials.";
             header("Location: ../admin_login.php");
             exit;
         } else {
-            echo $data['success'];
-            echo  $data['message'];
-            // $_SESSION['message'] = $data['message'];
-            echo  $data['error'];
+            $_SESSION['error_message'] = "Registration failed: " . $questionData['message'];
             header("Location: ../registration.php");
             exit;
         }
-        // echo "<script>alert({$_data['message']});</script>";
-        // $_SESSION['message'] = $data['message'];
-        // header("Location: ../users.php");
-        // exit;
     } else {
-        echo $data['success'];
-        echo  $data['message'];
-        // $_SESSION['message'] = $data['message'];
-        echo  $data['error'];
+        $_SESSION['error_message'] = "Registration failed: " . $data['message'];
         header("Location: ../registration.php");
         exit;
     }
-
-
-
-    // echo "<h2>Registration Data Received:</h2>";
-    // echo "<p><strong>Username:</strong> $username</p>";
-    // echo "<p><strong>Password:</strong> (hashed securely, not shown)</p>";
-    // echo "<p><strong>Security Question:</strong> $question</p>";
-    // echo "<p><strong>Answer:</strong> $answer</p>";
-    // echo "<p><strong>Hashed Password:</strong> $hashedPassword</p>";
 } else {
-    echo "No data submitted.";
+    $_SESSION['error_message'] = "Invalid request method.";
+    header("Location: ../registration.php");
+    exit;
 }
