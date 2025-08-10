@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    header("Location: admin_dashboard.php");
+    header("Location: users.php");
     exit;
 }
 
@@ -24,7 +24,7 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
 <head>
 
     <title>Home Security System</title>
-
+    <link rel="stylesheet" href="assests/css/adminlog.css">
 </head>
 
 <body>
