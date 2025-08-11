@@ -101,14 +101,14 @@ $code = $codeManager->codes;
             </form>
         </div>
 
-        <form method="POST" action="./actions/main_action.php" class="add-user-form">
+        <form method="POST" action="./actions/main_action.php" class="add-user-form"  onsubmit="return validateUserForm();">
             <h2>Add New User</h2>
             <label>Name:</label>
-            <input type="text" name="name" placeholder="Enter name" required />
+            <input type="text" name="name" id="name" placeholder="Enter name" required />
             <label>Mobile Number:</label>
-            <input type="text" name="mobile_number" placeholder="Enter mobile number" required />
+            <input type="text" name="mobile_number" id="mobile_number" placeholder="Enter mobile number" required />
             <label>NIC:</label>
-            <input type="text" name="nic" placeholder="Enter NIC" required />
+            <input type="text" name="nic"id="nic" placeholder="Enter NIC" required />
             <button type="submit">➕ Add Code</button>
         </form>
 
@@ -161,5 +161,6 @@ $code = $codeManager->codes;
             }
         });
     </script>
+    <script src="assests/js/user.js"></script>
 </body>
 </html>
