@@ -2,16 +2,22 @@
 // lock.php
 session_start();
 
-// Clear the session messages after displaying
+// Handle messages from session
+$message = '';
+$messageType = '';
+
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    $messageType = $_SESSION['message_type'] ?? 'info';
+    
+    // Clear the messages after getting them
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+}
+
+// Clear any old login messages
 unset($_SESSION['login_message']);
 unset($_SESSION['login_message_type']);
-if (isset($_SESSION['message'])) {
-
-            $msg = htmlspecialchars($_SESSION['message'], ENT_QUOTES);
-            echo "<script>alert('{$msg}');</script>";
-            unset($_SESSION['message']);  // clear the message after showing
-
-        }
 ?>
 
 <!DOCTYPE html>
@@ -55,8 +61,8 @@ if (isset($_SESSION['message'])) {
     </form>
 
     <?php if (!empty($message)): ?>
-      <div class="message <?php echo $messageType; ?>">
-        <?php echo $message; ?>
+      <div class="message <?php echo $messageType; ?>" id="messageDiv">
+        <?php echo htmlspecialchars($message); ?>
         <?php if ($messageType === 'success'): ?>
           <br><small>Redirecting to home...</small>
         <?php endif; ?>
@@ -69,5 +75,14 @@ if (isset($_SESSION['message'])) {
   </div>
 
   <script src="assests/js/lock.js"></script>
+  
+  <!-- Auto-hide success messages -->
+  <?php if ($messageType === 'success'): ?>
+  <script>
+    setTimeout(function() {
+      window.location.href = 'index.php';
+    }, 2000);
+  </script>
+  <?php endif; ?>
 </body>
 </html>

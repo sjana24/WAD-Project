@@ -17,10 +17,75 @@ body {
 .login-container {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    padding: 50px 40px;
+    padding: 30px 40px;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2);
-    text-align: center;
+    text-align: left;
     width: 100%;
-    max-width: 450px;
+    max-width: 600px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.form-row label {
+    min-width: 100px;
+    font-weight: 500;
+}
+
+.form-row input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+button {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.message {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message.error {
+    background-color: #ffe6e6;
+    color: #d63031;
+    border: 1px solid #fab1a0;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #00b894;
+    border: 1px solid #00cec9;
 }
