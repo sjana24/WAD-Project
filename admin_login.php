@@ -36,8 +36,12 @@ if (empty($message) && isset($_SESSION['login_message'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home Security System - Admin Login</title>
-    <link rel="stylesheet" href="assests/css/admin_login.css">
+
+
+    <title>Home Security System</title>
+    <link rel="icon" type="image/png" href="./assests/images/logo.svg" />
+    <link rel="stylesheet" href="assests/css/adminlog.css">
+
 </head>
 
 <body>

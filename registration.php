@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Registration form</title>
     <link rel="stylesheet" href="assests/css/registration_form.css" />
+     <link rel="icon" type="image/png" href="./assests/images/logo.svg" />
 </head>
 <body>
 

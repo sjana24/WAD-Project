@@ -26,6 +26,7 @@ unset($_SESSION['login_message_type']);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home Security System - Lock Screen</title>
+  <link rel="icon" type="image/png" href="./assests/images/logo.svg" />
   <link rel="stylesheet" href="assests/css/lock.css">
 </head>
 <body>

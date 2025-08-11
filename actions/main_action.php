@@ -167,6 +167,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } else {
             $updatedStatus = $status === "active" ? "inactive" : "active";
+
+            echo "<br>edit id is" . $edit_id . "-" . $updatedStatus."to".$status;
+
             $response = $myObj->user_status_manage($edit_id, $updatedStatus);
             $data = json_decode($response, true);
 
