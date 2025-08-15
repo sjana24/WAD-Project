@@ -16,17 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['code'])) {
     if ($status === 'Success') {
         echo "<script>
             alert('Access Granted ✅');
-            window.location.href = '../lock.php';
+            window.location.href = '../index.php';
         </script>";
     } else {
         echo "<script>
             alert('Access Denied ❌');
-            window.location.href = '../lock.php';
+            window.location.href = '../index.php';
         </script>";
     }
 } else {
     echo "<script>
         alert('No code submitted.');
-        window.location.href = '../lock.php';
+        window.location.href = '../index.php';
     </script>";
 } -->

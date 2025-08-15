@@ -1,3 +1,18 @@
+<?php
+// index.php
+session_start();
+
+// Clear the session messages after displaying
+// unset($_SESSION['login_message']);
+// unset($_SESSION['login_message_type']);
+if (isset($_SESSION['message'])) {
+
+            $msg = htmlspecialchars($_SESSION['message'], ENT_QUOTES);
+            echo "<script>alert('{$msg}');</script>";
+            unset($_SESSION['message']);  // clear the message after showing
+
+        }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

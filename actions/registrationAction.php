@@ -110,6 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate password match
     if ($password !== $password_confirm) {
         echo "Error: Passwords do not match.";
+        //  $_SESSION['message'] ="Error: Passwords do not match.";
+        // header("Location: ../registration.php");
         exit;
     }
     $myObj = new Registration();
@@ -132,6 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo $data['success'];
             echo  $data['message'];
+            echo "<script>alert({$_data['message']});</script>";
             // $_SESSION['message'] = $data['message'];
             echo  $data['error'];
             header("Location: ../registration.php");

@@ -62,15 +62,15 @@
     //     $messageType = 'error';
     // }
 
-    // Store message in session and redirect back to lock.php
+    // Store message in session and redirect back to index.php
     //     $_SESSION['login_message'] = $message;
     //     $_SESSION['login_message_type'] = $messageType;
-    //     header("Location: ../lock.php");
+    //     header("Location: ../index.php");
     //     exit;
     // } 
     // else {
-    //     // If accessed directly without POST, redirect to lock.php
-    //     header("Location: ../lock.php");
+    //     // If accessed directly without POST, redirect to index.php
+    //     header("Location: ../index.php");
     //     exit;
     // } -->
 

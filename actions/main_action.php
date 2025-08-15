@@ -200,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // echo $data['success'];
             echo $data['message'];
             $_SESSION['message'] = $data['message'];
-            header("Location: ../lock.php");
+            header("Location: ../index.php");
                 exit;
             // echo $data['code'];
         } else {
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message'] = $data['message'];
             // $_SESSION['message'] = "knsdvjdsnjn";
             echo  $data['error'];
-            header("Location: ../lock.php");
+            header("Location: ../index.php");
                 exit;
         }
     }

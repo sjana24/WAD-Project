@@ -29,7 +29,7 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
 
 <head>
 
-    <title>Home Security System</title>
+    <title>Admin Login</title>
     <link rel="icon" type="image/png" href="./assests/images/logo.svg" />
     <link rel="stylesheet" href="assests/css/adminlog.css">
 </head>
@@ -42,7 +42,7 @@ unset($_SESSION['login_message'], $_SESSION['login_message_type']);
             <?= htmlspecialchars($message) ?>
         </p>
     <?php endif; ?>
-
+        
 
     <form method="POST" action="actions/main_action.php">
 
